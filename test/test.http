@@ -1,0 +1,11 @@
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "username" : "TestingNewEndpoint",
+  "pwd":"1234",
+  "ime":"Marcus",
+  "prezime": "Aurelius",
+  "email":"wiseguy@gmail.com",
+  "uloga": "ugostitelj"
+}

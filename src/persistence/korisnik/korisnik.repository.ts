@@ -33,7 +33,7 @@ export class KorisnikRepository implements IKorisnikRepository {
 
   async newKorisnik(registerDto: RegisterDTO): Promise<boolean> {
     const entity = await this.repository.create(registerDto);
-    if (this.repository.find(entity)) {
+    if (await this.repository.findOne({ username: entity.username })) {
       return false;
     }
     await this.repository.persistAndFlush(entity);

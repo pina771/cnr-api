@@ -24,7 +24,7 @@ export class KorisnikController {
     return this.korisnikService.getSingle(id);
   }
 
-  /*  */
+  /* NOTE: Zasad gleda samo postoji li korisničko ime  */
   @Post()
   async newKorisnik(@Body() registerDto: RegisterDTO) {
     const result = await this.korisnikService.newKorisnik(registerDto);

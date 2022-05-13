@@ -3,7 +3,6 @@ import { Objekt } from './Objekt';
 
 @Entity()
 export class Fotografija {
-
   @PrimaryKey()
   id!: number;
 
@@ -12,5 +11,4 @@ export class Fotografija {
 
   @ManyToOne({ entity: () => Objekt, fieldName: 'id_objekt', primary: true })
   idObjekt!: Objekt;
-
 }

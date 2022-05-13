@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { KorisnikModule } from 'src/domain/korisnik/korisnik.module';
-import { ObjektModule } from 'src/domain/objekt/objekt.module';
+import { DomainModule } from 'src/domain/domain.module';
+import { GradController } from './grad.controller';
 import { KorisnikController } from './korisnik.controller';
 import { ObjektController } from './objekt.controller';
 
 @Module({
-  imports: [KorisnikModule, ObjektModule],
-  controllers: [KorisnikController, ObjektController],
+  imports: [DomainModule],
+  controllers: [KorisnikController, ObjektController, GradController],
 })
 export class ApiModule {}

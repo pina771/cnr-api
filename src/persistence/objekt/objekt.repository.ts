@@ -13,9 +13,14 @@ export class ObjektRepository implements IObjektRepository {
     this.repository = this.orm.em.getRepository(Objekt);
   }
   async getAll(): Promise<ObjektModel[]> {
-    return await this.repository.findAll();
+    return await this.repository.findAll({
+      populate: ['fotografije', 'pogodnosti'],
+    });
   }
-  getFromCity(naziv: string): Promise<ObjektModel> {
-    throw new Error('Method not implemented.');
+
+  // NOTE: Ovdje treba definirati DTO za povrat koji ima
+  // objekt, fotografije, pogodnosti itd
+  async getSingleObjekt(): Promise<any> {
+    return null;
   }
 }

@@ -1,5 +1,15 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+  Collection,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryKey,
+  Property,
+} from '@mikro-orm/core';
+import { Fotografija } from './Fotografija';
 import { Grad } from './Grad';
+import { Pogodnost } from './Pogodnost';
 import { Ugostitelj } from './Ugostitelj';
 import { Vrsta } from './Vrsta';
 
@@ -39,4 +49,15 @@ export class Objekt {
 
   @ManyToOne({ entity: () => Vrsta, fieldName: 'kratica' })
   vrsta!: Vrsta;
+
+  @OneToMany({ entity: () => Fotografija, mappedBy: 'idObjekt' })
+  fotografije: Fotografija[];
+
+  @ManyToMany({
+    entity: () => Pogodnost,
+    pivotTable: 'sadrzi_pogodnost',
+    joinColumn: 'naziv',
+    mappedBy: (pogodnost) => pogodnost.sadrziPogodnost,
+  })
+  pogodnosti: Collection<Pogodnost>;
 }

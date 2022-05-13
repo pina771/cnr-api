@@ -13,8 +13,4 @@ export class ObjektService {
     const queryResult = await this.objektRepository.getAll();
     return queryResult;
   }
-
-  async getFromTown(naziv: string): Promise<ObjektModel> {
-    return await this.objektRepository.getFromCity(naziv);
-  }
 }

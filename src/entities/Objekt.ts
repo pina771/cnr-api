@@ -10,6 +10,7 @@ import {
 import { Fotografija } from './Fotografija';
 import { Grad } from './Grad';
 import { Pogodnost } from './Pogodnost';
+import { Recenzija } from './Recenzija';
 import { Ugostitelj } from './Ugostitelj';
 import { Vrsta } from './Vrsta';
 
@@ -51,7 +52,7 @@ export class Objekt {
   vrsta!: Vrsta;
 
   @OneToMany({ entity: () => Fotografija, mappedBy: 'idObjekt' })
-  fotografije: Fotografija[];
+  fotografije: Collection<Fotografija>;
 
   @ManyToMany({
     entity: () => Pogodnost,
@@ -60,4 +61,7 @@ export class Objekt {
     mappedBy: (pogodnost) => pogodnost.sadrziPogodnost,
   })
   pogodnosti: Collection<Pogodnost>;
+
+  @OneToMany({ entity: () => Recenzija, mappedBy: 'idObjekt' })
+  recenzije: Collection<Recenzija>;
 }

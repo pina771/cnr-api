@@ -5,12 +5,16 @@ import { GradModel } from 'src/domain/grad/grad.model';
 import { IGradRepository } from 'src/domain/grad/repository.interface';
 import { ObjektModel } from 'src/domain/objekt/objekt.model';
 import { Grad } from 'src/entities/Grad';
+import { EntityModelMapper } from '../entity-model.mapper';
 
 @Injectable()
 export class GradRepository implements IGradRepository {
   private readonly repository: EntityRepository<Grad>;
 
-  constructor(private readonly orm: MikroORM) {
+  constructor(
+    private readonly orm: MikroORM,
+    private readonly mapper: EntityModelMapper,
+  ) {
     this.repository = this.orm.em.getRepository(Grad);
   }
 
@@ -23,6 +27,6 @@ export class GradRepository implements IGradRepository {
       { naziv: nazivGrada },
       { populate: ['objekti', 'objekti.fotografije', 'objekti.vrsta'] },
     );
-    return queryResult.objekti;
+    return null;
   }
 }

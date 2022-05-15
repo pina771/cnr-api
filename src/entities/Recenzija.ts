@@ -4,7 +4,6 @@ import { Objekt } from './Objekt';
 
 @Entity()
 export class Recenzija {
-
   @ManyToOne({ entity: () => Gost, fieldName: 'id_korisnik', primary: true })
   idKorisnik!: Gost;
 
@@ -15,12 +14,11 @@ export class Recenzija {
   uređeno?: boolean = false;
 
   @Property({ columnType: 'date', defaultRaw: `now()` })
-  datumStvaranja!: string;
+  datumStvaranja!: Date;
 
   @Property({ length: 1000 })
   tekst!: string;
 
   @Property({ length: 100 })
   naslov!: string;
-
 }

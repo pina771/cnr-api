@@ -3,8 +3,11 @@ import { Korisnik } from './Korisnik';
 
 @Entity()
 export class Gost {
-
-  @OneToOne({ entity: () => Korisnik, fieldName: 'id_korisnik', onDelete: 'cascade', primary: true })
+  @OneToOne({
+    entity: () => Korisnik,
+    fieldName: 'id_korisnik',
+    onDelete: 'cascade',
+    primary: true,
+  })
   idKorisnik!: Korisnik;
-
 }

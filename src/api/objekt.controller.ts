@@ -9,11 +9,18 @@ export class ObjektController {
     private readonly objektService: ObjektService,
     private readonly gradService: GradService,
   ) {}
+
+  /* TODO: DTO IMPLEMENTACIJA */
   @Get()
   async getAll(@Query('city') nazivGrada: string): Promise<ObjektModel[]> {
     if (nazivGrada) {
       return this.gradService.getAllObjektFromGrad(nazivGrada);
     }
     return this.objektService.getAll();
+  }
+
+  @Get(':id')
+  async getSingle(@Param('id') idObjekt: number): Promise<ObjektModel> {
+    return this.objektService.getSingle(idObjekt);
   }
 }

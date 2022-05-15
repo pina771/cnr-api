@@ -1,4 +1,3 @@
 export class GradModel {
-  naziv!: string;
-  postanskiBroj!: number;
+  constructor(public naziv: string, public postanskiBroj: number) {}
 }

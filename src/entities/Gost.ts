@@ -1,5 +1,6 @@
-import { Entity, OneToOne } from '@mikro-orm/core';
+import { Collection, Entity, OneToMany, OneToOne } from '@mikro-orm/core';
 import { Korisnik } from './Korisnik';
+import { Recenzija } from './Recenzija';
 
 @Entity()
 export class Gost {
@@ -10,4 +11,10 @@ export class Gost {
     primary: true,
   })
   idKorisnik!: Korisnik;
+
+  @OneToMany({
+    entity: () => Recenzija,
+    mappedBy: 'idKorisnik',
+  })
+  recenzije: Collection<Recenzija>;
 }

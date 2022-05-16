@@ -1,4 +1,5 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { Gost } from './Gost';
 
 @Entity()
 export class Korisnik {
@@ -23,4 +24,7 @@ export class Korisnik {
 
   @Property({ length: 15 })
   uloga!: string;
+
+  @OneToOne({ entity: () => Gost, mappedBy: 'idKorisnik' })
+  gost?: Gost;
 }

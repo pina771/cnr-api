@@ -8,8 +8,6 @@ import { PogodnostModel } from '../pogodnost/pogodnost.model';
 import { RecenzijaModel } from '../recenzija/recenzija.model';
 import { VrstaModel } from '../vrsta/vrsta.model';
 
-/* TODO: Prominit Ugostitelj i Grad u domenske modele
-a ne entitete */
 export class ObjektModel {
   constructor(
     public id: number,

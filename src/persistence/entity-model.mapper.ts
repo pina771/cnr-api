@@ -6,7 +6,11 @@ import { ObjektModel } from 'src/domain/objekt/objekt.model';
 import { PogodnostModel } from 'src/domain/pogodnost/pogodnost.model';
 import { RecenzijaModel } from 'src/domain/recenzija/recenzija.model';
 import { Fotografija } from 'src/entities/Fotografija';
+import { Gost } from 'src/entities/Gost';
+import { Grad } from 'src/entities/Grad';
+import { Korisnik } from 'src/entities/Korisnik';
 import { Objekt } from 'src/entities/Objekt';
+import { Recenzija } from 'src/entities/Recenzija';
 
 @Injectable()
 export class EntityModelMapper {
@@ -37,9 +41,66 @@ export class EntityModelMapper {
         return new PogodnostModel(pogodnost.naziv, pogodnost.opis);
       });
 
-    /* TODO: Obaviti do kraja  */
-    /*     if (objekt.recenzije.isInitialized())
-      retval.recenzije = objekt.recenzije.getItems().map((recenzija) => {});
- */ return retval;
+    if (objekt.recenzije.isInitialized())
+      retval.recenzije = objekt.recenzije
+        .getItems()
+        .map((recEntity) =>
+          this.recenzijaE2M(recEntity),
+        ); /* NOTE: Zasad radi! */
+    return retval;
+  }
+
+  /* NOTE: ???? How to !? */
+  /* TODO : TESTIRATI OVO OBAVEZNO */
+  gradE2M(grad: Grad): GradModel {
+    return new GradModel(grad.naziv, grad.postanskiBroj);
+  }
+
+  /* Dvije su situacije ovdje koje želimo rješiti:
+   * 1. Ako instanciramo recenzije za neki objekt, onda moramo učitat gosta
+     iz Recenzija, a Objekt vec imamo
+   * 2. Ako instanciramo sve recenzije za gosta, onda se on prenosi kao argument 
+     i ne treba ga postavljati u modelu*/
+  recenzijaE2M(recenzija: Recenzija, gost?: KorisnikModel): RecenzijaModel {
+    let recModel: RecenzijaModel;
+    if (gost) {
+      recModel = new RecenzijaModel(
+        null,
+        recenzija.datumStvaranja,
+        recenzija.naslov,
+        recenzija.tekst,
+        recenzija.uređeno,
+      );
+      recModel.objekt = this.objektE2M(recenzija.idObjekt);
+    } else {
+      recModel = new RecenzijaModel(
+        this.korisnikE2M(recenzija.idKorisnik.idKorisnik),
+        recenzija.datumStvaranja,
+        recenzija.naslov,
+        recenzija.tekst,
+        recenzija.uređeno,
+      );
+    }
+    return recModel;
+  }
+
+  korisnikE2M(korisnik: Korisnik): KorisnikModel {
+    return new KorisnikModel(
+      korisnik.id,
+      korisnik.username,
+      korisnik.ime,
+      korisnik.prezime,
+      korisnik.email,
+      korisnik.uloga,
+    );
+  }
+
+  gostE2M(gost: Gost): KorisnikModel {
+    const korisnik = this.korisnikE2M(gost.idKorisnik);
+    if (gost.recenzije.isInitialized())
+      korisnik.recenzije = gost.recenzije
+        .getItems()
+        .map((recenzijaEntity) => this.recenzijaE2M(recenzijaEntity, korisnik));
+    return korisnik;
   }
 }

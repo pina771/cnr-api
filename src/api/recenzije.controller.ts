@@ -10,4 +10,9 @@ export class RecenzijaController {
   async getAll(): Promise<RecenzijaModel[]> {
     return this.recenzijaService.getAll();
   }
+
+  @Get()
+  async getFromSingle(): Promise<RecenzijaModel[]> {
+    return null;
+  }
 }

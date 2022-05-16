@@ -6,7 +6,6 @@ import { IObjektRepository } from 'src/domain/objekt/repository.interface';
 import { Objekt } from 'src/entities/Objekt';
 import { EntityModelMapper } from '../entity-model.mapper';
 
-/* TODO: Mapper */
 @Injectable()
 export class ObjektRepository implements IObjektRepository {
   private readonly repository: EntityRepository<Objekt>;
@@ -27,7 +26,6 @@ export class ObjektRepository implements IObjektRepository {
     });
   }
 
-  // TODO: Format!
   async getSingle(idObjekt: number): Promise<ObjektModel> {
     const queryResult = await this.repository.findOne(
       { id: idObjekt },

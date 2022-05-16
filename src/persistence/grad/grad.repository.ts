@@ -19,14 +19,27 @@ export class GradRepository implements IGradRepository {
   }
 
   async getAll(): Promise<GradModel[]> {
-    return await this.repository.findAll();
+    const queryResult = await this.repository.findAll();
+    return queryResult.map((gradEntity) => this.mapper.gradE2M(gradEntity));
   }
 
   async getAllObjektFromGrad(nazivGrada: string): Promise<ObjektModel[]> {
     const queryResult = await this.repository.findOne(
       { naziv: nazivGrada },
-      { populate: ['objekti', 'objekti.fotografije', 'objekti.vrsta'] },
+      {
+        populate: [
+          'objekti.vrsta',
+          'objekti.pogodnosti',
+          'objekti.fotografije',
+          'objekti.vrsta',
+        ],
+      },
     );
+    if (queryResult.objekti.isInitialized()) {
+      return queryResult.objekti.getItems().map((obj) => {
+        return this.mapper.objektE2M(obj);
+      });
+    }
     return null;
   }
 }

@@ -1,4 +1,10 @@
-import { Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+  Collection,
+  Entity,
+  OneToMany,
+  PrimaryKey,
+  Property,
+} from '@mikro-orm/core';
 import { Objekt } from './Objekt';
 
 @Entity()
@@ -10,5 +16,5 @@ export class Grad {
   postanskiBroj!: number;
 
   @OneToMany({ entity: () => Objekt, mappedBy: 'grad' })
-  objekti: Objekt[];
+  objekti: Collection<Objekt>;
 }

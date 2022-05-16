@@ -31,6 +31,7 @@ export class ObjektRepository implements IObjektRepository {
       { id: idObjekt },
       {
         populate: [
+          'vlasnik.idKorisnik',
           'fotografije',
           'pogodnosti',
           'vrsta',

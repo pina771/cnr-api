@@ -1,5 +1,12 @@
-import { Entity, OneToOne, Property } from '@mikro-orm/core';
+import {
+  Collection,
+  Entity,
+  OneToMany,
+  OneToOne,
+  Property,
+} from '@mikro-orm/core';
 import { Korisnik } from './Korisnik';
+import { Objekt } from './Objekt';
 
 @Entity()
 export class Ugostitelj {
@@ -13,4 +20,10 @@ export class Ugostitelj {
     primary: true,
   })
   idKorisnik!: Korisnik;
+
+  @OneToMany({
+    entity: () => Objekt,
+    mappedBy: 'vlasnik',
+  })
+  objekti: Collection<Objekt>;
 }

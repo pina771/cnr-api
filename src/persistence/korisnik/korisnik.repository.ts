@@ -32,10 +32,12 @@ export class KorisnikRepository implements IKorisnikRepository {
   async getSingle(requestedId: number): Promise<KorisnikModel> {
     const result = await this.repository.findOneOrFail(
       { id: requestedId },
-      { populate: ['gost.recenzije.idObjekt'] },
+      { populate: ['gost.recenzije.idObjekt', 'ugostitelj.objekti'] },
     );
-    if ((result.uloga = 'gost')) {
+    if (result.uloga == 'gost') {
       return this.mapper.gostE2M(result.gost);
+    } else if (result.uloga == 'ugostitelj') {
+      return this.mapper.ugostiteljE2M(result.ugostitelj);
     }
     return this.mapper.korisnikE2M(result);
   }

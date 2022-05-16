@@ -1,5 +1,6 @@
 import { Entity, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Gost } from './Gost';
+import { Ugostitelj } from './Ugostitelj';
 
 @Entity()
 export class Korisnik {
@@ -27,4 +28,7 @@ export class Korisnik {
 
   @OneToOne({ entity: () => Gost, mappedBy: 'idKorisnik' })
   gost?: Gost;
+
+  @OneToOne({ entity: () => Ugostitelj, mappedBy: 'idKorisnik' })
+  ugostitelj?: Ugostitelj;
 }

@@ -11,13 +11,16 @@ import { Grad } from 'src/entities/Grad';
 import { Korisnik } from 'src/entities/Korisnik';
 import { Objekt } from 'src/entities/Objekt';
 import { Recenzija } from 'src/entities/Recenzija';
+import { Ugostitelj } from 'src/entities/Ugostitelj';
 
 @Injectable()
 export class EntityModelMapper {
-  /* TODO: Napraviti mapiranje na objektModel */
-  objektE2M(objekt: Objekt): ObjektModel {
-    const vlasnik = objekt.vlasnik.idKorisnik;
-    const vlasnikModel = <KorisnikModel>vlasnik;
+  /* Ako je od ugostitelja, treba postaviti vlasnika na NULL
+   * zato što ne želimo cirkularan JSON */
+  objektE2M(objekt: Objekt, fromUgostitelj = false): ObjektModel {
+    const vlasnikModel = fromUgostitelj
+      ? null
+      : this.korisnikE2M(objekt.vlasnik.idKorisnik);
 
     const retval = new ObjektModel(
       objekt.id,
@@ -44,9 +47,7 @@ export class EntityModelMapper {
     if (objekt.recenzije.isInitialized())
       retval.recenzije = objekt.recenzije
         .getItems()
-        .map((recEntity) =>
-          this.recenzijaE2M(recEntity),
-        ); /* NOTE: Zasad radi! */
+        .map((recEntity) => this.recenzijaE2M(recEntity));
     return retval;
   }
 
@@ -101,6 +102,16 @@ export class EntityModelMapper {
       korisnik.recenzije = gost.recenzije
         .getItems()
         .map((recenzijaEntity) => this.recenzijaE2M(recenzijaEntity, korisnik));
+    return korisnik;
+  }
+
+  ugostiteljE2M(ugostitelj: Ugostitelj): KorisnikModel {
+    const korisnik = this.korisnikE2M(ugostitelj.idKorisnik);
+    if (ugostitelj.objekti.isInitialized()) {
+      korisnik.objekti = ugostitelj.objekti.getItems().map((objektEntity) => {
+        return this.objektE2M(objektEntity, true);
+      });
+    }
     return korisnik;
   }
 }

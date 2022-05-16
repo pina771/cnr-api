@@ -1,3 +1,4 @@
+import { ObjektModel } from '../objekt/objekt.model';
 import { RecenzijaModel } from '../recenzija/recenzija.model';
 
 export class KorisnikModel {
@@ -12,6 +13,8 @@ export class KorisnikModel {
     public pwd?: string, // Ne moramo lozinku prenositi u model
 
     // Ako je gost, onda ce imati recenzije
+    // ako ugostitelj, onda ce imati objekte
     public recenzije?: RecenzijaModel[],
+    public objekti?: ObjektModel[],
   ) {}
 }

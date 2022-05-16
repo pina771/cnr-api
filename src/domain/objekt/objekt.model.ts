@@ -14,7 +14,7 @@ export class ObjektModel {
     public naziv: string,
     public adresa: string,
     public kontaktBroj: string,
-    public vlasnik: KorisnikModel,
+    public vlasnik: KorisnikModel | null,
     public grad: GradModel | string,
     public vrsta: VrstaModel | string,
 

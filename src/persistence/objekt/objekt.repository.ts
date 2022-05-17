@@ -19,7 +19,7 @@ export class ObjektRepository implements IObjektRepository {
 
   async getAll(): Promise<any[]> {
     const result = await this.repository.findAll({
-      populate: ['fotografije', 'pogodnosti', 'vlasnik.idKorisnik'],
+      populate: ['fotografije', 'pogodnosti'],
     });
     return result.map((objEntity) => {
       return this.mapper.objektE2M(objEntity);

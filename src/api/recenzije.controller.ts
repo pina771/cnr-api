@@ -11,6 +11,7 @@ export class RecenzijaController {
     return this.recenzijaService.getAll();
   }
 
+  /* TODO: Provjeriti da li treba uopće ovo raditi */
   @Get()
   async getFromSingle(): Promise<RecenzijaModel[]> {
     return null;

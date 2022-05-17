@@ -3,6 +3,7 @@ import {
   ConflictException,
   Controller,
   Get,
+  HttpCode,
   InternalServerErrorException,
   Param,
   Post,
@@ -26,6 +27,7 @@ export class KorisnikController {
 
   /* NOTE: Zasad gleda samo postoji li korisničko ime  */
   @Post()
+  @HttpCode(201)
   async newKorisnik(@Body() registerDto: RegisterDTO) {
     const result = await this.korisnikService.newKorisnik(registerDto);
     if (!result) {

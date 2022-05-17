@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { LoginResultDto } from 'src/api/dtos/korisnik/login-result.dto';
 import { LoginDTO } from 'src/api/dtos/login.dto';
 
 import { KorisnikService } from 'src/domain/korisnik/korisnik.service';
@@ -14,6 +15,7 @@ export class AuthService {
   /* Koristi se tijekom prijave */
   async validateUser(loginDto: LoginDTO): Promise<any> {
     const korisnik = await this.korisnikService.getSingle(loginDto.username);
+    console.log(korisnik);
     if (korisnik && korisnik.pwd === loginDto.password) {
       const { pwd, ...result } = korisnik;
       return result; /* Uklonimo lozinku za svaki slučaj */
@@ -32,7 +34,8 @@ export class AuthService {
     };
     return {
       access_token: this.jwtService.sign(payload),
-      user: korisnik,
+      // user: korisnik // ako želimo da se prenosi sve odma
+      user: new LoginResultDto(korisnik),
     };
   }
 }

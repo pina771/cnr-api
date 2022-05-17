@@ -16,6 +16,7 @@ import { GradService } from 'src/domain/grad/grad.service';
 import { ObjektModel } from 'src/domain/objekt/objekt.model';
 import { ObjektService } from 'src/domain/objekt/objekt.service';
 import { CreateObjectDTO } from './dtos/create-object.dto';
+import { UpdateObjektDTO } from './dtos/update-object.dto';
 
 /* TODO: Postaviti DTO za većinu ovih */
 @Controller('objects')
@@ -55,17 +56,26 @@ export class ObjektController {
   }
 
   /* Dohvat jednog objekta -- dohvaćaju se i recenzije, detalji itd. */
-  @Get(':id')
-  async getSingle(@Param('id') sidObjekt: string): Promise<ObjektModel> {
+  @Get(':sid')
+  async getSingle(@Param('sid') sidObjekt: string): Promise<ObjektModel> {
     return this.objektService.getSingle(sidObjekt);
   }
 
   /* Ažuriranje objekta */
-  @Put(':id')
+  /* WIP */
+  @UseGuards(JwtAuthGuard)
+  @Put(':sid')
   async updateObjekt(
-    @Param('id') idObjekt: number,
-    @Body('objekt') objekt: CreateObjectDTO,
-  ): Promise<any> {}
+    @Request() req,
+    @Param('sid') sidObjekt: string,
+    @Body() noviObjekt: UpdateObjektDTO,
+  ): Promise<any> {
+    return this.objektService.updateObjekt(
+      req.user.username,
+      sidObjekt,
+      noviObjekt,
+    );
+  }
 
   /* Objavljivanje recenzije za objekt */
   @Post(':id')

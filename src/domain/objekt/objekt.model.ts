@@ -15,8 +15,8 @@ export class ObjektModel {
     public adresa: string,
     public kontaktBroj: string,
     public vlasnik: KorisnikModel,
-    public grad: GradModel | string,
-    public vrsta: VrstaModel | string,
+    public grad: GradModel,
+    public vrsta: VrstaModel,
 
     public radnoVrijeme?: string,
     public datumStvaranja?: Date,

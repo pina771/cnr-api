@@ -48,7 +48,7 @@ export class Objekt {
   @ManyToOne({ entity: () => Ugostitelj, fieldName: 'id_korisnik' })
   vlasnik!: Ugostitelj;
 
-  @ManyToOne({ entity: () => Grad })
+  @ManyToOne({ entity: () => Grad, cascade: [] })
   grad!: Grad;
 
   @ManyToOne({ entity: () => Vrsta, fieldName: 'kratica' })

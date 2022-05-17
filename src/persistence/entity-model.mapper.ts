@@ -23,13 +23,14 @@ export class EntityModelMapper {
       korisnik.prezime,
       korisnik.email,
       korisnik.uloga,
+      korisnik.pwd,
     );
   }
 
   /* Ako je od ugostitelja, treba postaviti vlasnika na NULL
    * zato što ne želimo cirkularan JSON */
   objektE2M(objekt: Objekt, fromUgostitelj = false): ObjektModel {
-    const vlasnikModel = fromUgostitelj
+    const vlasnikAsKorisnik = fromUgostitelj
       ? null
       : this.korisnikE2M(objekt.vlasnik.idKorisnik);
 
@@ -38,9 +39,9 @@ export class EntityModelMapper {
       objekt.naziv,
       objekt.adresa,
       objekt.kontaktBroj,
-      vlasnikModel,
-      objekt.grad.naziv,
-      objekt.vrsta.kratica,
+      vlasnikAsKorisnik,
+      objekt.grad,
+      objekt.vrsta,
       objekt.radnoVrijeme,
       objekt.datumStvaranja,
       objekt.potvrden,

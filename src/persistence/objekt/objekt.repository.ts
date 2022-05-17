@@ -1,11 +1,15 @@
-import { MikroORM, UuidType } from '@mikro-orm/core';
+import { Collection, MikroORM, UuidType, wrap } from '@mikro-orm/core';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
+import { UpdateObjektDTO } from 'src/api/dtos/update-object.dto';
 import { ObjektModel } from 'src/domain/objekt/objekt.model';
 import { IObjektRepository } from 'src/domain/objekt/repository.interface';
+import { Grad } from 'src/entities/Grad';
 import { Korisnik } from 'src/entities/Korisnik';
 import { Objekt } from 'src/entities/Objekt';
+import { Pogodnost } from 'src/entities/Pogodnost';
 import { Ugostitelj } from 'src/entities/Ugostitelj';
+import { Vrsta } from 'src/entities/Vrsta';
 import { EntityModelMapper } from '../entity-model.mapper';
 
 @Injectable()
@@ -44,10 +48,76 @@ export class ObjektRepository implements IObjektRepository {
     return this.mapper.objektE2M(queryResult);
   }
 
+  /* TODO: Rework ovo da prima createObjectDTO, tu na licu stvoriti novi entity
+   * koji prima  */
   async newObjekt(objekt: ObjektModel): Promise<any> {
-    const ugostitelj = this.orm.em
+    const korisnik = await this.orm.em
       .getRepository(Korisnik)
       .findOne({ username: objekt.vlasnik.username });
-    console.log('ugostitelj pronađen' + ugostitelj);
+    const grad = await this.orm.em
+      .getRepository(Grad)
+      .findOne({ naziv: objekt.grad.naziv });
+    const vrsta = await this.orm.em
+      .getRepository(Vrsta)
+      .findOne({ kratica: objekt.vrsta.kratica });
+    const objektEntity = this.repository.create({
+      naziv: objekt.naziv,
+      adresa: objekt.adresa,
+      radnoVrijeme: objekt.radnoVrijeme,
+      kontaktBroj: objekt.kontaktBroj,
+      sid: objekt.sid,
+      vlasnik: korisnik.ugostitelj,
+      grad: grad,
+      vrsta: vrsta,
+    });
+    await this.repository.persistAndFlush(objektEntity);
+    return true;
+  }
+
+  /* Ažurira već postojeći objekt */
+  async updateObjekt(
+    postojeciObjekt: ObjektModel,
+    noviObjekt: UpdateObjektDTO,
+  ): Promise<ObjektModel> {
+    // Entitet kojeg treba ažurirati
+    const objektEntity = await this.repository.findOne({
+      sid: postojeciObjekt.sid,
+    });
+    const { grad, vrsta, pogodnosti, ...ostatak } = noviObjekt;
+
+    // ove koje nisu entiteti/reference mozemo jednostavno samo izmjeniti
+    this.orm.em.assign(objektEntity, ostatak);
+
+    // Ako je neko mijenjao grad (zašto uopće bi se to radilo... )
+    // moramo pronaći entitet grada(grad je šifarnik pa uvik se radi već postojeći entitet)
+    // i postaviti referencu na njega
+    if (grad) {
+      const gradEntity = await this.orm.em
+        .getRepository(Grad)
+        .findOne({ naziv: grad.naziv });
+      objektEntity.grad = gradEntity;
+    }
+    // Isto vrijedi i za vrstu
+    if (vrsta) {
+      const vrstaEntity = await this.orm.em
+        .getRepository(Vrsta)
+        .findOne({ kratica: vrsta.kratica });
+      objektEntity.vrsta = vrstaEntity;
+    }
+
+    // Za pogodnosti je situacija zafrkana, moramo ukloniti sve pogodnosti i
+    // onda ponovo gledamo koje su odabrane u formi i trazimo te entitete
+    objektEntity.pogodnosti.removeAll();
+    if (pogodnosti) {
+      const svePogodnosti = await this.orm.em
+        .getRepository(Pogodnost)
+        .findAll();
+      svePogodnosti.forEach((pogodnost) => {
+        if (pogodnosti.includes(pogodnost.naziv))
+          objektEntity.pogodnosti.add(pogodnost);
+      });
+    }
+    await this.repository.flush();
+    return this.mapper.objektE2M(objektEntity);
   }
 }

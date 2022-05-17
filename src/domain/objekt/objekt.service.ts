@@ -14,7 +14,11 @@ export class ObjektService {
     return queryResult;
   }
 
-  async getSingle(idObjekt: number): Promise<ObjektModel> {
-    return await this.objektRepository.getSingle(idObjekt);
+  async getSingle(sidObjekt: string): Promise<ObjektModel> {
+    return await this.objektRepository.getSingle(sidObjekt);
+  }
+
+  async newObjekt(objekt: ObjektModel): Promise<any> {
+    return await this.objektRepository.newObjekt(objekt);
   }
 }

@@ -10,6 +10,7 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { GradService } from 'src/domain/grad/grad.service';
 import { ObjektModel } from 'src/domain/objekt/objekt.model';
@@ -37,16 +38,26 @@ export class ObjektController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async newObjekt(@Request() req, @Body() body: CreateObjectDTO) {
-    if (req.uloga != 'ugostitelj')
+    if (req.user.uloga != 'ugostitelj')
       throw new UnauthorizedException(
         'Samo ugostitelji mogu stvarati nove objekte!',
       );
+    const objModel = new ObjektModel(
+      randomUUID(),
+      body.naziv,
+      body.adresa,
+      body.kontaktBroj,
+      body.vlasnik,
+      body.grad,
+      body.vrsta,
+    );
+    return this.objektService.newObjekt(objModel);
   }
 
   /* Dohvat jednog objekta -- dohvaćaju se i recenzije, detalji itd. */
   @Get(':id')
-  async getSingle(@Param('id') idObjekt: number): Promise<ObjektModel> {
-    return this.objektService.getSingle(idObjekt);
+  async getSingle(@Param('id') sidObjekt: string): Promise<ObjektModel> {
+    return this.objektService.getSingle(sidObjekt);
   }
 
   /* Ažuriranje objekta */

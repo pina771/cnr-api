@@ -10,11 +10,11 @@ import { VrstaModel } from '../vrsta/vrsta.model';
 
 export class ObjektModel {
   constructor(
-    public id: number,
+    public sid: string,
     public naziv: string,
     public adresa: string,
     public kontaktBroj: string,
-    public vlasnik: KorisnikModel | null,
+    public vlasnik: KorisnikModel,
     public grad: GradModel | string,
     public vrsta: VrstaModel | string,
 

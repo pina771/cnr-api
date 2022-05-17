@@ -8,6 +8,7 @@ import {
   Param,
   Post,
 } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 import { KorisnikModel } from 'src/domain/Korisnik/korisnik.model';
 import { KorisnikService } from 'src/domain/korisnik/korisnik.service';
 import { RegisterDTO } from './dtos/register.dto';
@@ -20,18 +21,24 @@ export class KorisnikController {
     return this.korisnikService.getAll();
   }
 
-  @Get(':id')
-  async getSingle(@Param('id') id: number): Promise<KorisnikModel> {
-    return this.korisnikService.getSingle(id);
+  @Get(':username')
+  async getSingle(@Param('username') username: string): Promise<KorisnikModel> {
+    return this.korisnikService.getSingle(username);
   }
 
   /* NOTE: Zasad gleda samo postoji li korisničko ime  */
   @Post()
   @HttpCode(201)
   async newKorisnik(@Body() registerDto: RegisterDTO) {
-    const result = await this.korisnikService.newKorisnik(registerDto);
-    if (!result) {
-      throw new ConflictException('Already exists.');
-    } else return;
+    const korisnik = new KorisnikModel(
+      randomUUID(),
+      registerDto.username,
+      registerDto.ime,
+      registerDto.prezime,
+      registerDto.email,
+      registerDto.uloga,
+      registerDto.pwd,
+    );
+    return await this.korisnikService.newKorisnik(korisnik);
   }
 }

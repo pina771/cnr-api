@@ -6,6 +6,7 @@ import { KorisnikModel } from 'src/domain/Korisnik/korisnik.model';
 import { IKorisnikRepository } from 'src/domain/korisnik/repository.interface';
 import { Gost } from 'src/entities/Gost';
 import { Korisnik } from 'src/entities/Korisnik';
+import { Ugostitelj } from 'src/entities/Ugostitelj';
 import { EntityModelMapper } from '../entity-model.mapper';
 
 /* Konkretna implementacija IKorisnikRepository za Mikro-ORM */
@@ -29,9 +30,9 @@ export class KorisnikRepository implements IKorisnikRepository {
     );
   }
 
-  async getSingle(requestedId: number): Promise<KorisnikModel> {
+  async getSingle(username: string): Promise<KorisnikModel> {
     const result = await this.repository.findOneOrFail(
-      { id: requestedId },
+      { username: username },
       { populate: ['gost.recenzije.idObjekt', 'ugostitelj.objekti'] },
     );
     if (result.uloga == 'gost') {
@@ -42,19 +43,19 @@ export class KorisnikRepository implements IKorisnikRepository {
     return this.mapper.korisnikE2M(result);
   }
 
-  async getByUsername(username: string): Promise<KorisnikModel | null> {
-    const result = await this.repository.findOne({ username: username });
-    if (result) return result;
-    return null;
-  }
-
-  async newKorisnik(registerDto: RegisterDTO): Promise<boolean> {
-    const entity = await this.repository.create(registerDto);
-    if (await this.repository.findOne({ username: entity.username })) {
-      return false;
+  async newKorisnik(korisnik: KorisnikModel): Promise<boolean> {
+    const entity = this.repository.create(korisnik);
+    if (entity.uloga == 'ugostitelj') {
+      const ugostitelj = this.orm.em
+        .getRepository(Ugostitelj)
+        .create({ idKorisnik: entity });
+      await this.orm.em.getRepository(Ugostitelj).persistAndFlush(ugostitelj);
+    } else if (entity.uloga == 'gost') {
+      const gost = this.orm.em
+        .getRepository(Gost)
+        .create({ idKorisnik: entity });
+      await this.orm.em.getRepository(Gost).persistAndFlush(gost);
     }
-    await this.repository.persistAndFlush(entity);
-    if (entity) return true;
-    return false;
+    return true;
   }
 }

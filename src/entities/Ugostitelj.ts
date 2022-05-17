@@ -1,4 +1,5 @@
 import {
+  Cascade,
   Collection,
   Entity,
   OneToMany,
@@ -18,6 +19,8 @@ export class Ugostitelj {
     fieldName: 'id_korisnik',
     onDelete: 'cascade',
     primary: true,
+    cascade: [Cascade.PERSIST],
+    inversedBy: 'ugostitelj',
   })
   idKorisnik!: Korisnik;
 
@@ -25,5 +28,5 @@ export class Ugostitelj {
     entity: () => Objekt,
     mappedBy: 'vlasnik',
   })
-  objekti: Collection<Objekt>;
+  objekti?: Collection<Objekt>;
 }

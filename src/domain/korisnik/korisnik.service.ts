@@ -18,16 +18,11 @@ export class KorisnikService {
     return queryResult;
   }
 
-  async getSingle(id: number): Promise<KorisnikModel> {
-    return await this.korisnikRepository.getSingle(id);
+  async getSingle(username: string): Promise<KorisnikModel> {
+    return await this.korisnikRepository.getSingle(username);
   }
 
-  async getByUsername(username: string): Promise<KorisnikModel | null> {
-    return await this.korisnikRepository.getByUsername(username);
-  }
-
-  async newKorisnik(registerDto: RegisterDTO): Promise<boolean> {
-    console.log('inside service');
-    return await this.korisnikRepository.newKorisnik(registerDto);
+  async newKorisnik(korisnik: KorisnikModel): Promise<boolean> {
+    return await this.korisnikRepository.newKorisnik(korisnik);
   }
 }

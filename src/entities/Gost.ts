@@ -1,4 +1,10 @@
-import { Collection, Entity, OneToMany, OneToOne } from '@mikro-orm/core';
+import {
+  Cascade,
+  Collection,
+  Entity,
+  OneToMany,
+  OneToOne,
+} from '@mikro-orm/core';
 import { Korisnik } from './Korisnik';
 import { Recenzija } from './Recenzija';
 
@@ -9,6 +15,8 @@ export class Gost {
     fieldName: 'id_korisnik',
     onDelete: 'cascade',
     primary: true,
+    cascade: [Cascade.PERSIST],
+    inversedBy: 'gost',
   })
   idKorisnik!: Korisnik;
 
@@ -16,5 +24,5 @@ export class Gost {
     entity: () => Recenzija,
     mappedBy: 'idKorisnik',
   })
-  recenzije: Collection<Recenzija>;
+  recenzije?: Collection<Recenzija>;
 }

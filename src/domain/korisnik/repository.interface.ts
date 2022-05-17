@@ -3,7 +3,6 @@ import { KorisnikModel } from './korisnik.model';
 
 export interface IKorisnikRepository {
   getAll(): Promise<KorisnikModel[]>;
-  getSingle(id: number): Promise<KorisnikModel>;
-  getByUsername(username: string): Promise<KorisnikModel | null>;
-  newKorisnik(registerDto: RegisterDTO);
+  getSingle(username: string): Promise<KorisnikModel>;
+  newKorisnik(korisnik: KorisnikModel);
 }

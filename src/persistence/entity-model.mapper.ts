@@ -15,6 +15,17 @@ import { Ugostitelj } from 'src/entities/Ugostitelj';
 
 @Injectable()
 export class EntityModelMapper {
+  korisnikE2M(korisnik: Korisnik): KorisnikModel {
+    return new KorisnikModel(
+      korisnik.sid,
+      korisnik.username,
+      korisnik.ime,
+      korisnik.prezime,
+      korisnik.email,
+      korisnik.uloga,
+    );
+  }
+
   /* Ako je od ugostitelja, treba postaviti vlasnika na NULL
    * zato što ne želimo cirkularan JSON */
   objektE2M(objekt: Objekt, fromUgostitelj = false): ObjektModel {
@@ -23,7 +34,7 @@ export class EntityModelMapper {
       : this.korisnikE2M(objekt.vlasnik.idKorisnik);
 
     const retval = new ObjektModel(
-      objekt.id,
+      objekt.sid,
       objekt.naziv,
       objekt.adresa,
       objekt.kontaktBroj,
@@ -83,17 +94,6 @@ export class EntityModelMapper {
       );
     }
     return recModel;
-  }
-
-  korisnikE2M(korisnik: Korisnik): KorisnikModel {
-    return new KorisnikModel(
-      korisnik.id,
-      korisnik.username,
-      korisnik.ime,
-      korisnik.prezime,
-      korisnik.email,
-      korisnik.uloga,
-    );
   }
 
   gostE2M(gost: Gost): KorisnikModel {

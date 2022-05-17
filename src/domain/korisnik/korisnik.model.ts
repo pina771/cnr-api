@@ -3,7 +3,7 @@ import { RecenzijaModel } from '../recenzija/recenzija.model';
 
 export class KorisnikModel {
   constructor(
-    public id: number,
+    public sid: string,
     public username: string,
 
     public ime: string,

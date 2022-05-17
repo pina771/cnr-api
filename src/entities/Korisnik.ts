@@ -1,4 +1,11 @@
-import { Entity, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+  Cascade,
+  Entity,
+  OneToOne,
+  PrimaryKey,
+  Property,
+  UuidType,
+} from '@mikro-orm/core';
 import { Gost } from './Gost';
 import { Ugostitelj } from './Ugostitelj';
 
@@ -26,9 +33,19 @@ export class Korisnik {
   @Property({ length: 15 })
   uloga!: string;
 
-  @OneToOne({ entity: () => Gost, mappedBy: 'idKorisnik' })
+  @Property({ type: UuidType })
+  sid!: string;
+
+  @OneToOne({
+    entity: () => Gost,
+    mappedBy: 'idKorisnik',
+  })
   gost?: Gost;
 
-  @OneToOne({ entity: () => Ugostitelj, mappedBy: 'idKorisnik' })
+  @OneToOne({
+    entity: () => Ugostitelj,
+    mappedBy: 'idKorisnik',
+    cascade: [Cascade.PERSIST],
+  })
   ugostitelj?: Ugostitelj;
 }

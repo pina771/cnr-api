@@ -31,6 +31,9 @@ export class Objekt {
   @Property({ name: 'kontakt_broj', length: 15 })
   kontaktBroj!: string;
 
+  @Property({ unique: true, length: 129 })
+  sid: string;
+
   @Property({
     name: 'datum_stvaranja',
     length: 6,

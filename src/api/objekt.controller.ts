@@ -1,6 +1,8 @@
 import {
   Body,
+  ConflictException,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -15,7 +17,9 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { GradService } from 'src/domain/grad/grad.service';
 import { ObjektModel } from 'src/domain/objekt/objekt.model';
 import { ObjektService } from 'src/domain/objekt/objekt.service';
+import { RecenzijaService } from 'src/domain/recenzija/recenzija.service';
 import { CreateObjectDTO } from './dtos/create-object.dto';
+import { CreateRecenzijaDTO } from './dtos/recenzija/create-recenzija.dto';
 import { UpdateObjektDTO } from './dtos/update-object.dto';
 
 /* TODO: Postaviti DTO za većinu ovih */
@@ -24,6 +28,7 @@ export class ObjektController {
   constructor(
     private readonly objektService: ObjektService,
     private readonly gradService: GradService,
+    private readonly recenzijaService: RecenzijaService,
   ) {}
 
   /* Dohvat svih objekata ili onih iz jednog grada */
@@ -62,7 +67,6 @@ export class ObjektController {
   }
 
   /* Ažuriranje objekta */
-  /* WIP */
   @UseGuards(JwtAuthGuard)
   @Put(':sid')
   async updateObjekt(
@@ -77,7 +81,45 @@ export class ObjektController {
     );
   }
 
-  /* Objavljivanje recenzije za objekt */
-  @Post(':id')
-  async postReview(): Promise<any> {}
+  /* Objavljivanje/ažuriranje recenzije za objekt */
+  @UseGuards(JwtAuthGuard)
+  @Post(':sid/reviews')
+  async postReview(
+    @Param('sid') objSid: string,
+    @Request() req,
+    @Body() recenzijaInfo: CreateRecenzijaDTO,
+  ): Promise<any> {
+    if (req.user.uloga != 'gost')
+      throw new UnauthorizedException('Samo gosti mogu objavljivati recenzije');
+
+    if (await this.recenzijaService.getSingle(objSid, req.user.username))
+      return await this.recenzijaService.updateRecenzija(
+        objSid,
+        recenzijaInfo,
+        req.user.username,
+      );
+    return await this.recenzijaService.newRecenzija(
+      objSid,
+      recenzijaInfo,
+      req.user.username,
+    );
+  }
+
+  /* Brisanje recenzije za objekt */
+  /* WIP */
+  @UseGuards(JwtAuthGuard)
+  @Delete(':sid/reviews')
+  async deleteReview(
+    @Param('sid') objSid: string,
+    @Request() req,
+  ): Promise<any> {
+    if (req.user.uloga != 'gost')
+      throw new UnauthorizedException(
+        'Samo gosti mogu objavljivati recenzije!',
+      );
+    return await this.recenzijaService.deleteRecenzija(
+      objSid,
+      req.user.username,
+    );
+  }
 }

@@ -1,4 +1,5 @@
 import {
+  Cascade,
   Collection,
   Entity,
   ManyToMany,
@@ -60,8 +61,8 @@ export class Objekt {
   @ManyToMany({
     entity: () => Pogodnost,
     pivotTable: 'sadrzi_pogodnost',
-    joinColumn: 'naziv',
-    mappedBy: (pogodnost) => pogodnost.sadrziPogodnost,
+    joinColumn: 'id_objekt',
+    inverseJoinColumn: 'naziv',
   })
   pogodnosti: Collection<Pogodnost>;
 

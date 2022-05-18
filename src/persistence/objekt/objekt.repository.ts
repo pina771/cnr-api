@@ -48,8 +48,7 @@ export class ObjektRepository implements IObjektRepository {
     return this.mapper.objektE2M(queryResult);
   }
 
-  /* TODO: Rework ovo da prima createObjectDTO, tu na licu stvoriti novi entity
-   * koji prima  */
+  /* TODO: Rework ovo da prima createObjectDTO */
   async newObjekt(objekt: ObjektModel): Promise<any> {
     const korisnik = await this.orm.em
       .getRepository(Korisnik)
@@ -83,6 +82,7 @@ export class ObjektRepository implements IObjektRepository {
     const objektEntity = await this.repository.findOne({
       sid: postojeciObjekt.sid,
     });
+    objektEntity.pogodnosti.loadItems();
     const { grad, vrsta, pogodnosti, ...ostatak } = noviObjekt;
 
     // ove koje nisu entiteti/reference mozemo jednostavno samo izmjeniti
@@ -117,7 +117,9 @@ export class ObjektRepository implements IObjektRepository {
           objektEntity.pogodnosti.add(pogodnost);
       });
     }
-    await this.repository.flush();
+    await this.repository.persistAndFlush(objektEntity);
     return this.mapper.objektE2M(objektEntity);
   }
+
+  /* TODO: Dodavanje fotografija objektu */
 }

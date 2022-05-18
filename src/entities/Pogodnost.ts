@@ -17,9 +17,7 @@ export class Pogodnost {
 
   @ManyToMany({
     entity: () => Objekt,
-    pivotTable: 'sadrzi_pogodnost',
-    joinColumn: 'naziv',
-    inverseJoinColumn: 'id_objekt',
+    mappedBy: 'pogodnosti',
   })
-  sadrziPogodnost = new Collection<Objekt>(this);
+  objekti = new Collection<Objekt>(this);
 }

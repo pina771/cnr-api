@@ -40,6 +40,12 @@ export class ObjektController {
     return this.objektService.getAll();
   }
 
+  /* Dohvat jednog objekta -- dohvaćaju se i recenzije, detalji itd. */
+  @Get(':sid')
+  async getSingle(@Param('sid') sidObjekt: string): Promise<ObjektModel> {
+    return this.objektService.getSingle(sidObjekt);
+  }
+
   /* Stvaranje novog objekta - može samo ugostitelj !*/
   @UseGuards(JwtAuthGuard)
   @Post()
@@ -58,12 +64,6 @@ export class ObjektController {
       body.vrsta,
     );
     return this.objektService.newObjekt(objModel);
-  }
-
-  /* Dohvat jednog objekta -- dohvaćaju se i recenzije, detalji itd. */
-  @Get(':sid')
-  async getSingle(@Param('sid') sidObjekt: string): Promise<ObjektModel> {
-    return this.objektService.getSingle(sidObjekt);
   }
 
   /* Ažuriranje objekta */
@@ -106,7 +106,6 @@ export class ObjektController {
   }
 
   /* Brisanje recenzije za objekt */
-  /* WIP */
   @UseGuards(JwtAuthGuard)
   @Delete(':sid/reviews')
   async deleteReview(

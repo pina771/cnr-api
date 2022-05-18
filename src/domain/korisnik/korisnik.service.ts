@@ -1,5 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RegisterDTO } from 'src/api/dtos/register.dto';
+import { ObjektModel } from '../objekt/objekt.model';
+import { RecenzijaModel } from '../recenzija/recenzija.model';
 import { KorisnikModel } from './korisnik.model';
 import { IKorisnikRepository } from './repository.interface';
 
@@ -13,16 +15,26 @@ export class KorisnikService {
     @KorisnikRepo() private readonly korisnikRepository: IKorisnikRepository,
   ) {}
 
+  async newKorisnik(korisnik: KorisnikModel): Promise<boolean> {
+    return await this.korisnikRepository.newKorisnik(korisnik);
+  }
+
   async getAll(): Promise<KorisnikModel[]> {
     const queryResult = await this.korisnikRepository.getAll();
     return queryResult;
   }
 
-  async getSingle(username: string): Promise<KorisnikModel> {
-    return await this.korisnikRepository.getSingle(username);
+  async getAllObjektFromKorisnik(username: string): Promise<ObjektModel[]> {
+    return await this.korisnikRepository.getAllObjektFromKorisnik(username);
   }
 
-  async newKorisnik(korisnik: KorisnikModel): Promise<boolean> {
-    return await this.korisnikRepository.newKorisnik(korisnik);
+  async getAllRecenzijaFromKorisnik(
+    username: string,
+  ): Promise<RecenzijaModel[]> {
+    return await this.korisnikRepository.getAllRecenzijaFromKorisnik(username);
+  }
+
+  async getSingle(username: string): Promise<KorisnikModel> {
+    return await this.korisnikRepository.getSingle(username);
   }
 }

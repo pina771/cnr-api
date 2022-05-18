@@ -1,5 +1,12 @@
-import { Entity, ManyToOne, Property } from '@mikro-orm/core';
+import {
+  Collection,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  Property,
+} from '@mikro-orm/core';
 import { Gost } from './Gost';
+import { Komentar } from './Komentar';
 import { Objekt } from './Objekt';
 
 @Entity()
@@ -21,4 +28,10 @@ export class Recenzija {
 
   @Property({ length: 100 })
   naslov!: string;
+
+  @OneToMany({
+    entity: () => Komentar,
+    mappedBy: (komentar) => komentar.idKorisnikRecenzija,
+  })
+  komentari?: Collection<Komentar>;
 }

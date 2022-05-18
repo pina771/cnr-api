@@ -15,7 +15,6 @@ export class AuthService {
   /* Koristi se tijekom prijave */
   async validateUser(loginDto: LoginDTO): Promise<any> {
     const korisnik = await this.korisnikService.getSingle(loginDto.username);
-    console.log(korisnik);
     if (korisnik && korisnik.pwd === loginDto.password) {
       const { pwd, ...result } = korisnik;
       return result; /* Uklonimo lozinku za svaki slučaj */

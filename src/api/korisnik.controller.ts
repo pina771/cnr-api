@@ -39,6 +39,8 @@ export class KorisnikController {
       registerDto.uloga,
       registerDto.pwd,
     );
+    if (await this.korisnikService.getSingle(registerDto.username))
+      throw new ConflictException('Korisničko ime zauzeto.');
     return await this.korisnikService.newKorisnik(korisnik);
   }
 }

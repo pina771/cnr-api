@@ -31,15 +31,17 @@ export class KorisnikRepository implements IKorisnikRepository {
   }
 
   async getSingle(username: string): Promise<KorisnikModel> {
-    const result = await this.repository.findOneOrFail(
+    const result = await this.repository.findOne(
       { username: username },
       { populate: ['gost.recenzije.idObjekt', 'ugostitelj.objekti'] },
     );
+    if (!result) return null;
     if (result.uloga == 'gost') {
       return this.mapper.gostE2M(result.gost);
     } else if (result.uloga == 'ugostitelj') {
       return this.mapper.ugostiteljE2M(result.ugostitelj);
     }
+
     return this.mapper.korisnikE2M(result);
   }
 

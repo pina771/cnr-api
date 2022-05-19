@@ -15,8 +15,8 @@ export class CreateObjektDto {
   /* TODO: */
   public fotografije: string[];
 
-  public radnoVrijeme?: string;
-  public datumStvaranja?: Date;
-  public potvrden?: boolean;
-  public sid?: string;
+  public radnoVrijeme?: string; // moze se poslati, ali ne treba (ako ne zeli)
+  public datumStvaranja?: Date; // Ne treba slat, automatski se postavi
+  public potvrden?: boolean; // Ne treba slat, automatski se postavi na false
+  public sid?: string; // Ne treba slat, stvori se sam
 }

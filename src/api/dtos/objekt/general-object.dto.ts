@@ -5,6 +5,7 @@ export class GeneralObjektDTO {
   naziv: string;
   adresa: string;
   kontaktBroj: string;
+  vlasnik: string;
 
   grad: string;
   vrsta: string;
@@ -22,5 +23,6 @@ export class GeneralObjektDTO {
     this.radnoVrijeme = objModel.radnoVrijeme;
     this.datumStvaranja = objModel.datumStvaranja;
     this.potvrden = objModel.potvrden;
+    this.vlasnik = objModel.vlasnik.username;
   }
 }

@@ -26,7 +26,7 @@ export class Objekt {
   @Property({ length: 50 })
   adresa!: string;
 
-  @Property({ name: 'radno_vrijeme', length: 30, nullable: true })
+  @Property({ name: 'radno_vrijeme', length: 130, nullable: true })
   radnoVrijeme?: string;
 
   @Property({ name: 'kontakt_broj', length: 15 })

@@ -1,5 +1,5 @@
 import { GeneralKorisnikDto } from '../korisnik/general.dto';
-import { GeneralObjektDTO } from '../object/general-object.dto';
+import { GeneralObjektDTO } from '../objekt/general-object.dto';
 
 export class GeneralRecenzijaDTO {
   gost: GeneralKorisnikDto;

@@ -1,6 +1,8 @@
 import { Collection, MikroORM, UuidType, wrap } from '@mikro-orm/core';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
+import { randomUUID } from 'crypto';
+import { CreateObjektDto } from 'src/api/dtos/create-object.dto';
 import { UpdateObjektDTO } from 'src/api/dtos/update-object.dto';
 import { ObjektModel } from 'src/domain/objekt/objekt.model';
 import { IObjektRepository } from 'src/domain/objekt/repository.interface';
@@ -45,20 +47,20 @@ export class ObjektRepository implements IObjektRepository {
         ],
       },
     );
+    if (!queryResult) return null;
     return this.mapper.objektE2M(queryResult);
   }
 
-  /* TODO: Rework ovo da prima createObjectDTO */
-  async newObjekt(objekt: ObjektModel): Promise<any> {
+  async newObjekt(objekt: CreateObjektDto): Promise<any> {
     const korisnik = await this.orm.em
       .getRepository(Korisnik)
-      .findOne({ username: objekt.vlasnik.username });
+      .findOne({ username: objekt.vlasnik });
     const grad = await this.orm.em
       .getRepository(Grad)
-      .findOne({ naziv: objekt.grad.naziv });
+      .findOne({ naziv: objekt.grad });
     const vrsta = await this.orm.em
       .getRepository(Vrsta)
-      .findOne({ kratica: objekt.vrsta.kratica });
+      .findOne({ kratica: objekt.vrsta });
     const objektEntity = this.repository.create({
       naziv: objekt.naziv,
       adresa: objekt.adresa,
@@ -69,6 +71,14 @@ export class ObjektRepository implements IObjektRepository {
       grad: grad,
       vrsta: vrsta,
     });
+    objektEntity.sid = randomUUID();
+    if (objekt.pogodnosti) {
+      const pogodnostiEntity = await this.orm.em
+        .getRepository(Pogodnost)
+        .find({ naziv: objekt.pogodnosti });
+      pogodnostiEntity.forEach((pe) => objektEntity.pogodnosti.add(pe));
+    }
+
     await this.repository.persistAndFlush(objektEntity);
     return true;
   }
@@ -94,14 +104,14 @@ export class ObjektRepository implements IObjektRepository {
     if (grad) {
       const gradEntity = await this.orm.em
         .getRepository(Grad)
-        .findOne({ naziv: grad.naziv });
+        .findOne({ naziv: grad });
       objektEntity.grad = gradEntity;
     }
     // Isto vrijedi i za vrstu
     if (vrsta) {
       const vrstaEntity = await this.orm.em
         .getRepository(Vrsta)
-        .findOne({ kratica: vrsta.kratica });
+        .findOne({ kratica: vrsta });
       objektEntity.vrsta = vrstaEntity;
     }
 
@@ -119,6 +129,16 @@ export class ObjektRepository implements IObjektRepository {
     }
     await this.repository.persistAndFlush(objektEntity);
     return this.mapper.objektE2M(objektEntity);
+  }
+
+  async deleteObjekt(sidObjekt: string): Promise<any> {
+    const objEntity = await this.repository.findOne(
+      { sid: sidObjekt },
+      { populate: ['pogodnosti'] },
+    );
+    objEntity.pogodnosti.removeAll();
+    await this.repository.flush();
+    await this.repository.removeAndFlush(objEntity);
   }
 
   /* TODO: Dodavanje fotografija objektu */

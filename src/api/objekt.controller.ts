@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Post,
   Put,
@@ -18,7 +19,9 @@ import { GradService } from 'src/domain/grad/grad.service';
 import { ObjektModel } from 'src/domain/objekt/objekt.model';
 import { ObjektService } from 'src/domain/objekt/objekt.service';
 import { RecenzijaService } from 'src/domain/recenzija/recenzija.service';
-import { CreateObjectDTO } from './dtos/create-object.dto';
+import { CreateObjektDto } from './dtos/create-object.dto';
+import { DetailedObjektDTO } from './dtos/objekt/detailed-object.dto';
+import { GeneralObjektDTO } from './dtos/objekt/general-object.dto';
 import { CreateRecenzijaDTO } from './dtos/recenzija/create-recenzija.dto';
 import { UpdateObjektDTO } from './dtos/update-object.dto';
 
@@ -33,37 +36,34 @@ export class ObjektController {
 
   /* Dohvat svih objekata ili onih iz jednog grada */
   @Get()
-  async getAll(@Query('city') nazivGrada: string): Promise<ObjektModel[]> {
+  async getAll(@Query('city') nazivGrada: string): Promise<GeneralObjektDTO[]> {
     if (nazivGrada) {
-      return this.gradService.getAllObjektFromGrad(nazivGrada);
+      return (await this.gradService.getAllObjektFromGrad(nazivGrada)).map(
+        (objModel) => new GeneralObjektDTO(objModel),
+      );
     }
-    return this.objektService.getAll();
+    return (await this.objektService.getAll()).map(
+      (objModel) => new GeneralObjektDTO(objModel),
+    );
   }
 
   /* Dohvat jednog objekta -- dohvaćaju se i recenzije, detalji itd. */
   @Get(':sid')
-  async getSingle(@Param('sid') sidObjekt: string): Promise<ObjektModel> {
-    return this.objektService.getSingle(sidObjekt);
+  async getSingle(@Param('sid') sidObjekt: string): Promise<DetailedObjektDTO> {
+    const obj = await this.objektService.getSingle(sidObjekt);
+    if (obj == null) throw new NotFoundException();
+    return new DetailedObjektDTO(obj);
   }
 
   /* Stvaranje novog objekta - može samo ugostitelj !*/
   @UseGuards(JwtAuthGuard)
   @Post()
-  async newObjekt(@Request() req, @Body() body: CreateObjectDTO) {
+  async newObjekt(@Request() req, @Body() body: CreateObjektDto) {
     if (req.user.uloga != 'ugostitelj')
       throw new UnauthorizedException(
         'Samo ugostitelji mogu stvarati nove objekte!',
       );
-    const objModel = new ObjektModel(
-      randomUUID(),
-      body.naziv,
-      body.adresa,
-      body.kontaktBroj,
-      body.vlasnik,
-      body.grad,
-      body.vrsta,
-    );
-    return this.objektService.newObjekt(objModel);
+    return this.objektService.newObjekt(body);
   }
 
   /* Ažuriranje objekta */
@@ -74,11 +74,24 @@ export class ObjektController {
     @Param('sid') sidObjekt: string,
     @Body() noviObjekt: UpdateObjektDTO,
   ): Promise<any> {
-    return this.objektService.updateObjekt(
-      req.user.username,
-      sidObjekt,
-      noviObjekt,
+    return new DetailedObjektDTO(
+      await this.objektService.updateObjekt(
+        req.user.username,
+        sidObjekt,
+        noviObjekt,
+      ),
     );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':sid')
+  async deleteObjekt(
+    @Request() req,
+    @Param('sid') sidObjekt: string,
+  ): Promise<any> {
+    if (req.user.uloga != 'ugostitelj')
+      throw new UnauthorizedException('Niste ugostitelj.');
+    return await this.objektService.deleteObjekt(req.user.username, sidObjekt);
   }
 
   /* Objavljivanje/ažuriranje recenzije za objekt */

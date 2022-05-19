@@ -1,4 +1,5 @@
 import {
+  Cascade,
   Collection,
   Entity,
   ManyToMany,
@@ -18,6 +19,7 @@ export class Pogodnost {
   @ManyToMany({
     entity: () => Objekt,
     mappedBy: 'pogodnosti',
+    cascade: [Cascade.REMOVE],
   })
   objekti = new Collection<Objekt>(this);
 }

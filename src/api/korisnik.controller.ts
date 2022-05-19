@@ -16,7 +16,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { KorisnikModel } from 'src/domain/Korisnik/korisnik.model';
 import { KorisnikService } from 'src/domain/korisnik/korisnik.service';
 import { GeneralKorisnikDto } from './dtos/korisnik/general.dto';
-import { GeneralObjektDTO } from './dtos/object/general-object.dto';
+import { GeneralObjektDTO } from './dtos/objekt/general-object.dto';
 import { GeneralRecenzijaDTO } from './dtos/recenzija/general-recenzija.dto';
 import { RegisterDTO } from './dtos/register.dto';
 
@@ -76,7 +76,7 @@ export class KorisnikController {
   }
 
   /* NOTE: OBSOLETE ?  */
-  @UseGuards(JwtAuthGuard)
+  /* @UseGuards(JwtAuthGuard)
   @Get(':username')
   async getSingle(
     @Param('username') username: string,
@@ -87,5 +87,5 @@ export class KorisnikController {
         'Možete dohvatiti samo svoje informacije.',
       );
     return this.korisnikService.getSingle(username);
-  }
+  } */
 }

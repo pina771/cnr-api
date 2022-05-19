@@ -1,5 +1,5 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { CreateObjectDTO } from 'src/api/dtos/create-object.dto';
+import { CreateObjektDto } from 'src/api/dtos/create-object.dto';
 import { UpdateObjektDTO } from 'src/api/dtos/update-object.dto';
 import { ObjektModel } from './objekt.model';
 import { IObjektRepository } from './repository.interface';
@@ -20,8 +20,8 @@ export class ObjektService {
     return await this.objektRepository.getSingle(sidObjekt);
   }
 
-  async newObjekt(objekt: ObjektModel): Promise<any> {
-    return await this.objektRepository.newObjekt(objekt);
+  async newObjekt(createDTO: CreateObjektDto): Promise<any> {
+    return await this.objektRepository.newObjekt(createDTO);
   }
 
   async updateObjekt(
@@ -36,5 +36,15 @@ export class ObjektService {
       postojeciObjekt,
       noviObjekt,
     );
+  }
+
+  async deleteObjekt(username: string, sidObjekt: string) {
+    const objekt = await this.objektRepository.getSingle(sidObjekt);
+
+    /* Prvo provjera je li zapravo upravitelj objekta */
+    if (username !== objekt.vlasnik.username)
+      throw new UnauthorizedException('Niste upravitelj objekta');
+
+    return await this.objektRepository.deleteObjekt(sidObjekt);
   }
 }

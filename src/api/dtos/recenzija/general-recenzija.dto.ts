@@ -2,7 +2,7 @@ import { GeneralKorisnikDto } from '../korisnik/general.dto';
 import { GeneralObjektDTO } from '../objekt/general-object.dto';
 
 export class GeneralRecenzijaDTO {
-  gost: GeneralKorisnikDto;
+  gostUsername: string;
   objekt: GeneralObjektDTO;
   datumStvaranja: Date;
   naslov: string;

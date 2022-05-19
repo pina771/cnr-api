@@ -18,6 +18,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { GradService } from 'src/domain/grad/grad.service';
 import { ObjektModel } from 'src/domain/objekt/objekt.model';
 import { ObjektService } from 'src/domain/objekt/objekt.service';
+import { RecenzijaModel } from 'src/domain/recenzija/recenzija.model';
 import { RecenzijaService } from 'src/domain/recenzija/recenzija.service';
 import { CreateObjektDto } from './dtos/create-object.dto';
 import { DetailedObjektDTO } from './dtos/objekt/detailed-object.dto';
@@ -53,13 +54,6 @@ export class ObjektController {
     const obj = await this.objektService.getSingle(sidObjekt);
     if (obj == null) throw new NotFoundException();
     return new DetailedObjektDTO(obj);
-  }
-
-  @Get(':sid/reviews')
-  async getAllRecenzijaForObjekt(
-    @Param('sid') sidObjekt: string,
-  ): Promise<any[]> {
-    return await this.recenzijaService.getAllFromObjekt(sidObjekt);
   }
 
   /* Stvaranje novog objekta - može samo ugostitelj !*/
@@ -101,7 +95,17 @@ export class ObjektController {
     return await this.objektService.deleteObjekt(req.user.username, sidObjekt);
   }
 
-  /* Objavljivanje/ažuriranje recenzije za objekt */
+  /* RECENZIJE ZA OBJEKT *********************************************************** */
+
+  /* Dohvat svih recenzija za objekt */
+  @Get(':sid/reviews')
+  async getAllRecenzijaForObjekt(
+    @Param('sid') sidObjekt: string,
+  ): Promise<RecenzijaModel[]> {
+    return await this.recenzijaService.getAllFromObjekt(sidObjekt);
+  }
+
+  /* Objavljivanje/ažuriranje recenzije za objekt - ispravno */
   @UseGuards(JwtAuthGuard)
   @Post(':sid/reviews')
   async postReview(
@@ -125,7 +129,7 @@ export class ObjektController {
     );
   }
 
-  /* Brisanje recenzije za objekt */
+  /* Brisanje recenzije za objekt - ispravno */
   @UseGuards(JwtAuthGuard)
   @Delete(':sid/reviews')
   async deleteReview(

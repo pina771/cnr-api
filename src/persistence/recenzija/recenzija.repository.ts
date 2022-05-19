@@ -46,6 +46,7 @@ export class RecenzijaRepository implements IRecenzijaRepository {
     const gost = (
       await this.orm.em.getRepository(Korisnik).findOne({ username: username })
     ).gost;
+
     const objekt = await this.orm.em
       .getRepository(Objekt)
       .findOne({ sid: objektSid });
@@ -56,9 +57,11 @@ export class RecenzijaRepository implements IRecenzijaRepository {
       },
       { populate: ['idObjekt'] },
     );
+    if (!recEntity) return null;
     return this.mapper.recenzijaE2M(recEntity);
   }
 
+  /* Ispravno */
   async newRecenzija(
     objektSid: string,
     recenzijaInfo: CreateRecenzijaDTO,
@@ -79,6 +82,7 @@ export class RecenzijaRepository implements IRecenzijaRepository {
     return;
   }
 
+  /* Ispravno */
   async updateRecenzija(
     objektSid: string,
     recenzijaInfo: CreateRecenzijaDTO,

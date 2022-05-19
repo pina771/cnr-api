@@ -17,7 +17,6 @@ import { KorisnikModel } from 'src/domain/Korisnik/korisnik.model';
 import { KorisnikService } from 'src/domain/korisnik/korisnik.service';
 import { GeneralKorisnikDto } from './dtos/korisnik/general.dto';
 import { GeneralObjektDTO } from './dtos/objekt/general-object.dto';
-import { GeneralRecenzijaDTO } from './dtos/recenzija/general-recenzija.dto';
 import { RegisterDTO } from './dtos/register.dto';
 
 @Controller('users')
@@ -45,6 +44,7 @@ export class KorisnikController {
     );
   }
 
+  /* TODO: Mapiranje na DTO? */
   @UseGuards(JwtAuthGuard)
   @Get(':username/reviews')
   async getAllRecenzijaFromKorisnik(

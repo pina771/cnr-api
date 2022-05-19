@@ -4,7 +4,7 @@ import { Recenzija } from './Recenzija';
 
 @Entity()
 export class Komentar {
-  @PrimaryKey()
+  @PrimaryKey({ name: 'id_komentar', autoincrement: true })
   idKomentar!: number;
 
   @Property({ length: 320 })
@@ -25,6 +25,12 @@ export class Komentar {
 
   @ManyToOne({
     entity: () => Recenzija,
+    fieldNames: ['id_korisnik_recenzija', 'id_objekt'],
+  })
+  recenzija: Recenzija;
+
+  /* @ManyToOne({
+    entity: () => Recenzija,
     fieldName: 'id_korisnik_recenzija',
     primary: true,
   })
@@ -35,5 +41,5 @@ export class Komentar {
     fieldName: 'id_korisnik_recenzija',
     primary: true,
   })
-  idObjekt!: Recenzija; // Objekt za koji se odnosi recenzija
+  idObjekt!: Recenzija; // Objekt za koji se odnosi recenzija */
 }

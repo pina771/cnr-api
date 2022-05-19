@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateRecenzijaDTO } from 'src/api/dtos/recenzija/create-recenzija.dto';
+import { KomentarModel } from '../komentar/komentar.model';
 import { RecenzijaModel } from './recenzija.model';
 import { IRecenzijaRepository } from './repository.interface';
 
@@ -51,5 +52,28 @@ export class RecenzijaService {
 
   async deleteRecenzija(objektSid: string, username: string): Promise<any> {
     return await this.recenzijaRepository.deleteRecenzija(objektSid, username);
+  }
+
+  /* KOMENTARI *****************************+ */
+
+  /* Dohvat svih komentara za jednu recenziju */
+  async getAllKomentarFromRecenzija(
+    objektSid: string,
+    username: string,
+  ): Promise<KomentarModel[]> {
+    return await this.recenzijaRepository.getAllKomentarFromRecenzija(
+      objektSid,
+      username,
+    );
+  }
+
+  async newKomentarToRecenzija(
+    recenzija: { objSid: string; username: string },
+    komentar: { username: string; tekst: string },
+  ): Promise<any> {
+    return await this.recenzijaRepository.newKomentarToRecenzija(
+      recenzija,
+      komentar,
+    );
   }
 }

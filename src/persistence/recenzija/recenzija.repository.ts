@@ -1,9 +1,11 @@
-import { EntityRepository, MikroORM } from '@mikro-orm/core';
+import { EntityRepository, MikroORM, NullHighlighter } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 import { CreateRecenzijaDTO } from 'src/api/dtos/recenzija/create-recenzija.dto';
+import { KomentarModel } from 'src/domain/komentar/komentar.model';
 import { RecenzijaModel } from 'src/domain/recenzija/recenzija.model';
 import { IRecenzijaRepository } from 'src/domain/recenzija/repository.interface';
 import { Gost } from 'src/entities/Gost';
+import { Komentar } from 'src/entities/Komentar';
 import { Korisnik } from 'src/entities/Korisnik';
 import { Objekt } from 'src/entities/Objekt';
 import { Recenzija } from 'src/entities/Recenzija';
@@ -102,6 +104,7 @@ export class RecenzijaRepository implements IRecenzijaRepository {
     return await this.repository.persistAndFlush(recenzija);
   }
 
+  /* Ispravno */
   async deleteRecenzija(objektSid: string, username: string): Promise<any> {
     const objekt = await this.orm.em.findOne(Objekt, { sid: objektSid });
     const korisnik = (
@@ -113,6 +116,68 @@ export class RecenzijaRepository implements IRecenzijaRepository {
     });
     console.log('Deleting!');
     this.repository.removeAndFlush(recenzija);
+    return;
+  }
+
+  /* KOMENTARI ********************************************** */
+
+  async getAllKomentarFromRecenzija(
+    objektSid: string,
+    username: string,
+  ): Promise<KomentarModel[]> {
+    const gost = (await this.orm.em.findOne(Korisnik, { username: username }))
+      .gost;
+    const objekt = await this.orm.em.findOne(Objekt, { sid: objektSid });
+
+    const recenzija = await this.repository.findOne(
+      { idKorisnik: gost, idObjekt: objekt },
+      { populate: ['komentari.idKorisnik'] },
+    );
+    return recenzija.komentari
+      .getItems()
+      .map((komEntity) => this.mapper.komentarE2M(komEntity, recenzija));
+  }
+
+  async newKomentarToRecenzija(
+    recenzija: { objSid: string; username: string },
+    komentar: { username: string; tekst: string },
+  ): Promise<any> {
+    // Dohvat recenzije
+    const recenzijaKorisnik = (
+      await this.orm.em.findOne(Korisnik, {
+        username: recenzija.username,
+      })
+    ).gost;
+    const komentarKorisnik = await this.orm.em.findOne(Korisnik, {
+      username: komentar.username,
+    });
+    const objekt = await this.orm.em.findOne(Objekt, { sid: recenzija.objSid });
+    const recEntity = await this.repository.findOne(
+      {
+        idKorisnik: recenzijaKorisnik,
+        idObjekt: objekt,
+      },
+      { populate: ['komentari.idKorisnik'] },
+    );
+    const noviKomentar = this.orm.em.create(Komentar, {
+      tekst: komentar.tekst,
+      idKorisnik: komentarKorisnik,
+      recenzija: recEntity,
+    });
+    await this.orm.em.persistAndFlush(noviKomentar);
+    return;
+  }
+
+  async updateKomentarToRecenzija(komentar: {
+    idKomentar: number;
+    tekst: string;
+  }): Promise<any> {
+    const komentarEntity = await this.orm.em.findOne(Komentar, {
+      idKomentar: komentar.idKomentar,
+    });
+    komentarEntity.tekst = komentar.tekst;
+    komentarEntity.uređeno = true;
+    await this.orm.em.persistAndFlush(komentarEntity);
     return;
   }
 }

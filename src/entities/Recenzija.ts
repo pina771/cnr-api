@@ -31,7 +31,7 @@ export class Recenzija {
 
   @OneToMany({
     entity: () => Komentar,
-    mappedBy: (komentar) => komentar.idKorisnikRecenzija,
+    mappedBy: (komentar) => komentar.recenzija,
   })
   komentari?: Collection<Komentar>;
 }

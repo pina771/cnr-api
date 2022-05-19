@@ -1,4 +1,5 @@
 import { CreateRecenzijaDTO } from 'src/api/dtos/recenzija/create-recenzija.dto';
+import { KomentarModel } from '../komentar/komentar.model';
 import { RecenzijaModel } from './recenzija.model';
 
 export interface IRecenzijaRepository {
@@ -21,4 +22,20 @@ export interface IRecenzijaRepository {
   ): Promise<any>;
 
   deleteRecenzija(objektSid: string, username: string): Promise<any>;
+
+  /* KOMENTARI ************************** */
+
+  /* Dohvat svih komentara za recenziju */
+  getAllKomentarFromRecenzija(
+    objektSid: string,
+    username: string,
+  ): Promise<KomentarModel[]>;
+
+  /* Objavljivanje novog komentara na recenziju */
+  newKomentarToRecenzija(
+    recenzija: { objSid: string; username: string },
+    komentar: { username: string; tekst: string },
+  ): Promise<any>;
+
+  /* TODO: Brisanje komentara */
 }

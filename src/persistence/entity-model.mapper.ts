@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { FotografijaModel } from 'src/domain/fotografija/fotografija.model';
 import { GradModel } from 'src/domain/grad/grad.model';
+import { KomentarModel } from 'src/domain/komentar/komentar.model';
 import { KorisnikModel } from 'src/domain/korisnik/korisnik.model';
 import { ObjektModel } from 'src/domain/objekt/objekt.model';
 import { PogodnostModel } from 'src/domain/pogodnost/pogodnost.model';
@@ -8,6 +9,7 @@ import { RecenzijaModel } from 'src/domain/recenzija/recenzija.model';
 import { Fotografija } from 'src/entities/Fotografija';
 import { Gost } from 'src/entities/Gost';
 import { Grad } from 'src/entities/Grad';
+import { Komentar } from 'src/entities/Komentar';
 import { Korisnik } from 'src/entities/Korisnik';
 import { Objekt } from 'src/entities/Objekt';
 import { Recenzija } from 'src/entities/Recenzija';
@@ -100,5 +102,18 @@ export class EntityModelMapper {
       });
     }
     return korisnik;
+  }
+
+  komentarE2M(komentar: Komentar, recenzija: Recenzija): KomentarModel {
+    return new KomentarModel(
+      komentar.idKorisnik.username,
+      komentar.idKorisnik.uloga,
+      komentar.tekst,
+      komentar.datumStvaranja,
+      recenzija.idKorisnik.idKorisnik.username,
+      recenzija.idObjekt.sid,
+      komentar.uređeno,
+      komentar.idKomentar,
+    );
   }
 }

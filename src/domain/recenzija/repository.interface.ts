@@ -6,6 +6,8 @@ export interface IRecenzijaRepository {
 
   getSingle(objektSid: string, username: string): Promise<RecenzijaModel>;
 
+  getAllFromObjekt(objektSid: string): Promise<RecenzijaModel[]>;
+
   newRecenzija(
     objektSid: string,
     recenzijaInfo: CreateRecenzijaDTO,

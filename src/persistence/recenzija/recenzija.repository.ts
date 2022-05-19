@@ -29,6 +29,16 @@ export class RecenzijaRepository implements IRecenzijaRepository {
     });
   }
 
+  async getAllFromObjekt(objektSid: string): Promise<RecenzijaModel[]> {
+    const objekt = await this.orm.em.findOne(
+      Objekt,
+      { sid: objektSid },
+      { populate: ['recenzije.idKorisnik.idKorisnik'] },
+    );
+    const recenzije = objekt.recenzije.getItems();
+    return recenzije.map((recEntity) => this.mapper.recenzijaE2M(recEntity));
+  }
+
   async getSingle(
     objektSid: string,
     username: string,

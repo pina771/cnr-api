@@ -23,6 +23,7 @@ import { CreateObjektDto } from './dtos/create-object.dto';
 import { DetailedObjektDTO } from './dtos/objekt/detailed-object.dto';
 import { GeneralObjektDTO } from './dtos/objekt/general-object.dto';
 import { CreateRecenzijaDTO } from './dtos/recenzija/create-recenzija.dto';
+import { GeneralRecenzijaDTO } from './dtos/recenzija/general-recenzija.dto';
 import { UpdateObjektDTO } from './dtos/update-object.dto';
 
 /* TODO: Postaviti DTO za većinu ovih */
@@ -47,12 +48,18 @@ export class ObjektController {
     );
   }
 
-  /* Dohvat jednog objekta -- dohvaćaju se i recenzije, detalji itd. */
   @Get(':sid')
   async getSingle(@Param('sid') sidObjekt: string): Promise<DetailedObjektDTO> {
     const obj = await this.objektService.getSingle(sidObjekt);
     if (obj == null) throw new NotFoundException();
     return new DetailedObjektDTO(obj);
+  }
+
+  @Get(':sid/reviews')
+  async getAllRecenzijaForObjekt(
+    @Param('sid') sidObjekt: string,
+  ): Promise<any[]> {
+    return await this.recenzijaService.getAllFromObjekt(sidObjekt);
   }
 
   /* Stvaranje novog objekta - može samo ugostitelj !*/

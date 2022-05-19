@@ -21,6 +21,10 @@ export class RecenzijaService {
     return await this.recenzijaRepository.getSingle(objektSid, username);
   }
 
+  async getAllFromObjekt(objektSid: string): Promise<RecenzijaModel[]> {
+    return await this.recenzijaRepository.getAllFromObjekt(objektSid);
+  }
+
   async newRecenzija(
     objektSid: string,
     recenzijaInfo: CreateRecenzijaDTO,

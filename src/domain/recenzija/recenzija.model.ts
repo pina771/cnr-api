@@ -11,6 +11,6 @@ export class RecenzijaModel {
     public naslov: string,
     public tekst: string,
     public uređeno?: boolean,
-    public objektSid?: { naziv: string; sid: string },
+    public objekt?: { naziv: string; sid: string },
   ) {}
 }

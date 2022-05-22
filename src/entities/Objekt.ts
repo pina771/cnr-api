@@ -58,7 +58,7 @@ export class Objekt {
   @OneToMany({
     entity: () => Fotografija,
     mappedBy: 'idObjekt',
-    orphanRemoval: true,
+    cascade: [Cascade.REMOVE],
   })
   fotografije: Collection<Fotografija>;
 

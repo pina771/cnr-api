@@ -26,14 +26,13 @@ export class Komentar {
     entity: () => Korisnik,
     fieldName: 'id_korisnik',
     primary: true,
-    cascade: [],
   })
   idKorisnik!: Korisnik; // Korisnik koji je ostavio komentar
 
   @ManyToOne({
     entity: () => Recenzija,
     fieldNames: ['id_korisnik_recenzija', 'id_objekt'],
-    cascade: [],
+    primary: true,
   })
   recenzija: Recenzija;
 

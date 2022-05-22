@@ -67,14 +67,14 @@ export class Objekt {
     pivotTable: 'sadrzi_pogodnost',
     joinColumn: 'id_objekt',
     inverseJoinColumn: 'naziv',
-    cascade: [Cascade.REMOVE],
+    cascade: [Cascade.REMOVE, Cascade.MERGE, Cascade.PERSIST],
   })
   pogodnosti: Collection<Pogodnost>;
 
   @OneToMany({
     entity: () => Recenzija,
     mappedBy: 'idObjekt',
-    cascade: [Cascade.REMOVE],
+    cascade: [Cascade.REMOVE, Cascade.PERSIST],
   })
   recenzije: Collection<Recenzija>;
 }

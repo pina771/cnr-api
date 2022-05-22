@@ -7,5 +7,6 @@ const config = {
   password: 'bazepodataka',
   entities: ['./dist/entities'],
   entitiesTs: ['./src/entities'],
+  debug: true,
 };
 export default config;

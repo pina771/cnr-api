@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RegisterDTO } from 'src/api/dtos/register.dto';
 import { ObjektModel } from '../objekt/objekt.model';
 import { RecenzijaModel } from '../recenzija/recenzija.model';
 import { KorisnikModel } from './korisnik.model';

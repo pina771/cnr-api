@@ -1,4 +1,4 @@
-import { Collection, MikroORM, UuidType, wrap } from '@mikro-orm/core';
+import { MikroORM } from '@mikro-orm/core';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
@@ -10,7 +10,6 @@ import { Grad } from 'src/entities/Grad';
 import { Korisnik } from 'src/entities/Korisnik';
 import { Objekt } from 'src/entities/Objekt';
 import { Pogodnost } from 'src/entities/Pogodnost';
-import { Ugostitelj } from 'src/entities/Ugostitelj';
 import { Vrsta } from 'src/entities/Vrsta';
 import { EntityModelMapper } from '../entity-model.mapper';
 

@@ -1,7 +1,3 @@
-import { GradModel } from 'src/domain/grad/grad.model';
-import { KorisnikModel } from 'src/domain/korisnik/korisnik.model';
-import { VrstaModel } from 'src/domain/vrsta/vrsta.model';
-
 export class CreateObjektDto {
   public naziv: string;
   public adresa: string;
@@ -13,7 +9,7 @@ export class CreateObjektDto {
   public pogodnosti?: string[];
 
   /* TODO: */
-  public fotografije?: string[];
+  public fotografije: string[];
 
   public radnoVrijeme?: string; // moze se poslati, ali ne treba (ako ne zeli)
   public datumStvaranja?: Date; // Ne treba slat, automatski se postavi

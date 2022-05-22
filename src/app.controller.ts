@@ -9,7 +9,6 @@ import {
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
 import { LocalAuthGuard } from './auth/guards/auth-local.guard';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Controller()
 export class AppController {

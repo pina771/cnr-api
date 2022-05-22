@@ -1,10 +1,9 @@
-import { EntityRepository, MikroORM, NullHighlighter } from '@mikro-orm/core';
+import { EntityRepository, MikroORM } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 import { CreateRecenzijaDTO } from 'src/api/dtos/recenzija/create-recenzija.dto';
 import { KomentarModel } from 'src/domain/komentar/komentar.model';
 import { RecenzijaModel } from 'src/domain/recenzija/recenzija.model';
 import { IRecenzijaRepository } from 'src/domain/recenzija/repository.interface';
-import { Gost } from 'src/entities/Gost';
 import { Komentar } from 'src/entities/Komentar';
 import { Korisnik } from 'src/entities/Korisnik';
 import { Objekt } from 'src/entities/Objekt';

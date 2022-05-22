@@ -1,21 +1,12 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { randomUUID } from 'crypto';
-import e from 'express';
-import { AuthModule } from 'src/auth/auth.module';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { GradModel } from 'src/domain/grad/grad.model';
 import { GradService } from 'src/domain/grad/grad.service';
-import { KorisnikModel } from 'src/domain/korisnik/korisnik.model';
-import { ObjektModel } from 'src/domain/objekt/objekt.model';
 import { ObjektService } from 'src/domain/objekt/objekt.service';
 import { RecenzijaService } from 'src/domain/recenzija/recenzija.service';
-import { VrstaModel } from 'src/domain/vrsta/vrsta.model';
 import { MockGradService } from 'src/mocks/services/mock-grad.service';
 import { MockObjektService } from 'src/mocks/services/mock-object.service';
 import { MockRecenzijaService } from 'src/mocks/services/mock-recenzija.service';
 
-import { CreateObjektDto } from '../dtos/create-object.dto';
 import { DetailedObjektDTO } from '../dtos/objekt/detailed-object.dto';
 import { GeneralObjektDTO } from '../dtos/objekt/general-object.dto';
 import { ObjektController } from '../objekt.controller';

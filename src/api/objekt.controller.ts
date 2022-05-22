@@ -1,6 +1,5 @@
 import {
   Body,
-  ConflictException,
   Controller,
   Delete,
   Get,
@@ -13,10 +12,8 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { randomUUID } from 'crypto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { GradService } from 'src/domain/grad/grad.service';
-import { ObjektModel } from 'src/domain/objekt/objekt.model';
 import { ObjektService } from 'src/domain/objekt/objekt.service';
 import { RecenzijaModel } from 'src/domain/recenzija/recenzija.model';
 import { RecenzijaService } from 'src/domain/recenzija/recenzija.service';
@@ -24,7 +21,6 @@ import { CreateObjektDto } from './dtos/create-object.dto';
 import { DetailedObjektDTO } from './dtos/objekt/detailed-object.dto';
 import { GeneralObjektDTO } from './dtos/objekt/general-object.dto';
 import { CreateRecenzijaDTO } from './dtos/recenzija/create-recenzija.dto';
-import { GeneralRecenzijaDTO } from './dtos/recenzija/general-recenzija.dto';
 import { UpdateObjektDTO } from './dtos/update-object.dto';
 
 /* TODO: Postaviti DTO za većinu ovih */

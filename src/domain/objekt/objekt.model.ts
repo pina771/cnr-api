@@ -1,6 +1,3 @@
-import { Grad } from 'src/entities/Grad';
-import { Ugostitelj } from 'src/entities/Ugostitelj';
-import { Vrsta } from 'src/entities/Vrsta';
 import { FotografijaModel } from '../fotografija/fotografija.model';
 import { GradModel } from '../grad/grad.model';
 import { KorisnikModel } from '../korisnik/korisnik.model';

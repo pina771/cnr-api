@@ -4,7 +4,6 @@ import {
   Delete,
   Param,
   Put,
-  Request,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';

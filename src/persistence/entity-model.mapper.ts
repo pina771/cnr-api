@@ -6,7 +6,6 @@ import { KorisnikModel } from 'src/domain/korisnik/korisnik.model';
 import { ObjektModel } from 'src/domain/objekt/objekt.model';
 import { PogodnostModel } from 'src/domain/pogodnost/pogodnost.model';
 import { RecenzijaModel } from 'src/domain/recenzija/recenzija.model';
-import { Fotografija } from 'src/entities/Fotografija';
 import { Gost } from 'src/entities/Gost';
 import { Grad } from 'src/entities/Grad';
 import { Komentar } from 'src/entities/Komentar';

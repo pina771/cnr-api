@@ -1,15 +1,12 @@
 import { MikroORM } from '@mikro-orm/core';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
-import { wrap } from 'module';
-import { RegisterDTO } from 'src/api/dtos/register.dto';
 import { KorisnikModel } from 'src/domain/Korisnik/korisnik.model';
 import { IKorisnikRepository } from 'src/domain/korisnik/repository.interface';
 import { ObjektModel } from 'src/domain/objekt/objekt.model';
 import { RecenzijaModel } from 'src/domain/recenzija/recenzija.model';
 import { Gost } from 'src/entities/Gost';
 import { Korisnik } from 'src/entities/Korisnik';
-import { Objekt } from 'src/entities/Objekt';
 import { Ugostitelj } from 'src/entities/Ugostitelj';
 import { EntityModelMapper } from '../entity-model.mapper';
 

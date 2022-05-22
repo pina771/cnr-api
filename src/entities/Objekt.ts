@@ -1,4 +1,5 @@
 import {
+  Cascade,
   Collection,
   Entity,
   ManyToMany,
@@ -72,7 +73,7 @@ export class Objekt {
   @OneToMany({
     entity: () => Recenzija,
     mappedBy: 'idObjekt',
-    orphanRemoval: true,
+    cascade: [Cascade.REMOVE],
   })
   recenzije: Collection<Recenzija>;
 }

@@ -6,6 +6,7 @@ import {
   OneToMany,
   Property,
 } from '@mikro-orm/core';
+import { Glas } from './Glas';
 import { Gost } from './Gost';
 import { Komentar } from './Komentar';
 import { Objekt } from './Objekt';
@@ -16,7 +17,7 @@ export class Recenzija {
     entity: () => Gost,
     fieldName: 'id_korisnik',
     primary: true,
-    cascade: [Cascade.REMOVE, Cascade.PERSIST],
+    cascade: [Cascade.PERSIST],
   })
   idKorisnik!: Gost;
 
@@ -24,7 +25,7 @@ export class Recenzija {
     entity: () => Objekt,
     fieldName: 'id_objekt',
     primary: true,
-    cascade: [Cascade.REMOVE, Cascade.PERSIST],
+    cascade: [Cascade.PERSIST],
   })
   idObjekt!: Objekt;
 
@@ -43,7 +44,7 @@ export class Recenzija {
   @OneToMany({
     entity: () => Komentar,
     mappedBy: (komentar) => komentar.recenzija,
-    orphanRemoval: true,
+    cascade: [Cascade.REMOVE],
   })
   komentari?: Collection<Komentar>;
 }

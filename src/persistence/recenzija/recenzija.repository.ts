@@ -114,10 +114,13 @@ export class RecenzijaRepository implements IRecenzijaRepository {
         idObjekt: objekt,
         idKorisnik: korisnik,
       },
-      { populate: 'komentari' },
+      { populate: ['komentari'] },
     );
-    console.log('Deleting!');
+    recenzija.komentari
+      .getItems()
+      .forEach(async (komentar) => await this.orm.em.removeAndFlush(komentar));
     this.repository.removeAndFlush(recenzija);
+
     return;
   }
 

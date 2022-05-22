@@ -1,4 +1,5 @@
 import {
+  Cascade,
   Collection,
   Entity,
   ManyToOne,
@@ -11,10 +12,20 @@ import { Objekt } from './Objekt';
 
 @Entity()
 export class Recenzija {
-  @ManyToOne({ entity: () => Gost, fieldName: 'id_korisnik', primary: true })
+  @ManyToOne({
+    entity: () => Gost,
+    fieldName: 'id_korisnik',
+    primary: true,
+    cascade: [Cascade.REMOVE, Cascade.PERSIST],
+  })
   idKorisnik!: Gost;
 
-  @ManyToOne({ entity: () => Objekt, fieldName: 'id_objekt', primary: true })
+  @ManyToOne({
+    entity: () => Objekt,
+    fieldName: 'id_objekt',
+    primary: true,
+    cascade: [Cascade.REMOVE, Cascade.PERSIST],
+  })
   idObjekt!: Objekt;
 
   @Property({ nullable: true, default: false })

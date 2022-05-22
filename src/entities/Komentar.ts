@@ -1,4 +1,10 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+  Cascade,
+  Entity,
+  ManyToOne,
+  PrimaryKey,
+  Property,
+} from '@mikro-orm/core';
 import { Korisnik } from './Korisnik';
 import { Recenzija } from './Recenzija';
 
@@ -20,12 +26,14 @@ export class Komentar {
     entity: () => Korisnik,
     fieldName: 'id_korisnik',
     primary: true,
+    cascade: [Cascade.REMOVE],
   })
   idKorisnik!: Korisnik; // Korisnik koji je ostavio komentar
 
   @ManyToOne({
     entity: () => Recenzija,
     fieldNames: ['id_korisnik_recenzija', 'id_objekt'],
+    cascade: [Cascade.REMOVE],
   })
   recenzija: Recenzija;
 

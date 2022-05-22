@@ -65,6 +65,9 @@ export class Objekt {
   })
   pogodnosti: Collection<Pogodnost>;
 
-  @OneToMany({ entity: () => Recenzija, mappedBy: 'idObjekt' })
+  @OneToMany({
+    entity: () => Recenzija,
+    mappedBy: 'idObjekt',
+  })
   recenzije: Collection<Recenzija>;
 }

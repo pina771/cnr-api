@@ -17,15 +17,13 @@ export class Recenzija {
     entity: () => Gost,
     fieldName: 'id_korisnik',
     primary: true,
-    cascade: [Cascade.PERSIST],
   })
   idKorisnik!: Gost;
 
   @ManyToOne({
     entity: () => Objekt,
     fieldName: 'id_objekt',
-    primary: true,
-    cascade: [Cascade.PERSIST],
+    cascade: [Cascade.REMOVE],
   })
   idObjekt!: Objekt;
 

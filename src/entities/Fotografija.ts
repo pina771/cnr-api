@@ -19,6 +19,7 @@ export class Fotografija {
     entity: () => Objekt,
     fieldName: 'id_objekt',
     primary: true,
+    cascade: [Cascade.REMOVE],
   })
   idObjekt!: Objekt;
 }

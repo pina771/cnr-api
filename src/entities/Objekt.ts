@@ -67,6 +67,7 @@ export class Objekt {
     pivotTable: 'sadrzi_pogodnost',
     joinColumn: 'id_objekt',
     inverseJoinColumn: 'naziv',
+    cascade: [Cascade.REMOVE],
   })
   pogodnosti: Collection<Pogodnost>;
 

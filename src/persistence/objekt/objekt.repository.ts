@@ -133,12 +133,18 @@ export class ObjektRepository implements IObjektRepository {
   async deleteObjekt(sidObjekt: string): Promise<any> {
     const objEntity = await this.repository.findOne(
       { sid: sidObjekt },
-      { populate: ['pogodnosti', 'fotografije', 'recenzije.komentari'] },
+      {
+        populate: [
+          'pogodnosti',
+          'fotografije',
+          'recenzije.komentari',
+          'recenzije.idKorisnik',
+        ],
+      },
     );
     objEntity.pogodnosti.removeAll();
-    objEntity.fotografije.removeAll();
-    objEntity.recenzije.removeAll();
-    this.repository.remove(objEntity).flush();
+    await this.orm.em.flush();
+    await this.repository.remove(objEntity).flush();
   }
 
   /* TODO: Dodavanje fotografija objektu */

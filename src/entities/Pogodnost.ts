@@ -19,7 +19,7 @@ export class Pogodnost {
   @ManyToMany({
     entity: () => Objekt,
     mappedBy: 'pogodnosti',
-    cascade: [Cascade.REMOVE],
+    pivotTable: 'sadrzi_pogodnost',
   })
   objekti = new Collection<Objekt>(this);
 }

@@ -133,9 +133,11 @@ export class ObjektRepository implements IObjektRepository {
   async deleteObjekt(sidObjekt: string): Promise<any> {
     const objEntity = await this.repository.findOne(
       { sid: sidObjekt },
-      { populate: ['pogodnosti'] },
+      { populate: ['pogodnosti', 'fotografije', 'recenzije'] },
     );
     objEntity.pogodnosti.removeAll();
+    objEntity.fotografije.removeAll();
+    objEntity.recenzije.removeAll();
     await this.repository.flush();
     await this.repository.removeAndFlush(objEntity);
   }

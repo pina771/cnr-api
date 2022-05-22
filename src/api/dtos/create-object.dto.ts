@@ -13,7 +13,7 @@ export class CreateObjektDto {
   public pogodnosti?: string[];
 
   /* TODO: */
-  public fotografije: string[];
+  public fotografije?: string[];
 
   public radnoVrijeme?: string; // moze se poslati, ali ne treba (ako ne zeli)
   public datumStvaranja?: Date; // Ne treba slat, automatski se postavi

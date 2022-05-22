@@ -1,4 +1,9 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateObjektDto } from 'src/api/dtos/create-object.dto';
 import { UpdateObjektDTO } from 'src/api/dtos/update-object.dto';
 import { ObjektModel } from './objekt.model';
@@ -43,7 +48,7 @@ export class ObjektService {
 
     /* Prvo provjera je li zapravo upravitelj objekta */
     if (username !== objekt.vlasnik.username)
-      throw new UnauthorizedException('Niste upravitelj objekta');
+      throw new ForbiddenException('Niste upravitelj objekta');
 
     return await this.objektRepository.deleteObjekt(sidObjekt);
   }

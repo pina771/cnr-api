@@ -54,7 +54,11 @@ export class Objekt {
   @ManyToOne({ entity: () => Vrsta, fieldName: 'kratica' })
   vrsta!: Vrsta;
 
-  @OneToMany({ entity: () => Fotografija, mappedBy: 'idObjekt' })
+  @OneToMany({
+    entity: () => Fotografija,
+    mappedBy: 'idObjekt',
+    orphanRemoval: true,
+  })
   fotografije: Collection<Fotografija>;
 
   @ManyToMany({
@@ -68,6 +72,7 @@ export class Objekt {
   @OneToMany({
     entity: () => Recenzija,
     mappedBy: 'idObjekt',
+    orphanRemoval: true,
   })
   recenzije: Collection<Recenzija>;
 }

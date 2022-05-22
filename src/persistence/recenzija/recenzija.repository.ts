@@ -109,10 +109,13 @@ export class RecenzijaRepository implements IRecenzijaRepository {
     const korisnik = (
       await this.orm.em.findOne(Korisnik, { username: username })
     ).gost;
-    const recenzija = await this.repository.findOne({
-      idObjekt: objekt,
-      idKorisnik: korisnik,
-    });
+    const recenzija = await this.repository.findOne(
+      {
+        idObjekt: objekt,
+        idKorisnik: korisnik,
+      },
+      { populate: 'komentari' },
+    );
     console.log('Deleting!');
     this.repository.removeAndFlush(recenzija);
     return;

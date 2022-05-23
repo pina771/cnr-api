@@ -134,12 +134,18 @@ export class RecenzijaRepository implements IRecenzijaRepository {
       .gost;
     const objekt = await this.orm.em.findOne(Objekt, { sid: objektSid });
 
-    const recenzija = await this.repository.findOne({
-      idKorisnik: gost,
-      idObjekt: objekt,
-    });
-    recenzija.komentari.loadItems();
-    return null;
+    const recenzija = await this.repository.findOne(
+      {
+        idKorisnik: gost,
+        idObjekt: objekt,
+      },
+      { populate: ['komentari.idKorisnik'] },
+    );
+    console.log(recenzija);
+    const komentari = await recenzija.komentari.loadItems();
+    return komentari.map((komentar) =>
+      this.mapper.komentarE2M(komentar, recenzija),
+    );
   }
 
   async newKomentarToRecenzija(

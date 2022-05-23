@@ -23,6 +23,7 @@ export class Recenzija {
   @ManyToOne({
     entity: () => Objekt,
     fieldName: 'id_objekt',
+    primary: true,
   })
   idObjekt!: Objekt;
 
@@ -41,7 +42,6 @@ export class Recenzija {
   @OneToMany({
     entity: () => Komentar,
     mappedBy: (komentar) => komentar.recenzija,
-    fieldNames: ['id_objekt', 'id_korisnik_recenzija'],
     cascade: [Cascade.REMOVE, Cascade.ALL],
   })
   komentari?: Collection<Komentar>;

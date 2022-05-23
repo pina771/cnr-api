@@ -32,7 +32,6 @@ export class Komentar {
   @ManyToOne({
     entity: () => Recenzija,
     fieldNames: ['id_korisnik_recenzija', 'id_objekt'],
-    primary: true,
   })
   recenzija: Recenzija;
 

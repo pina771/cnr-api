@@ -11,7 +11,7 @@ import { LocalStrategy } from './strategies/local.strategy';
     KorisnikModule,
     PassportModule,
     JwtModule.register({
-      secret: 'reflections-of-a-floating-world',
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '6h' },
     }),
   ],

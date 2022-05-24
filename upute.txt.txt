@@ -1,7 +1,0 @@
-Treba imati instaliran postgreSQL 14 nadalje na računalu. 
-Prilikom preuzimanja s github repozitorija potrebno je > npm install za instalirati ovisnosti.
-Potrebno je promijeniti datoteku mikro-orm-config.ts
-> podesiti korisničko ime i lozinku te verziju baze podataka
-> baza podataka se može učitati kroz pgAdmin pomoću datoteke baza
-
-Backend se pokreće s npm run start:dev ili samo npm run start

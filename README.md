@@ -1,4 +1,4 @@
-# FER, IS
+# FER, IS Projekt
 
 ---
 
